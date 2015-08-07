@@ -1,0 +1,680 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_background_gray"
+    android:orientation="vertical" >
+
+    <include layout="@layout/top_title" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="80dp"
+            android:background="@color/main_background_gray"
+            android:orientation="vertical"
+            android:paddingTop="2dp" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:paddingLeft="30dp"
+                android:gravity="center_vertical"
+                  >
+
+                <ImageView
+                    android:id="@+id/orderItemD_img_seller"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/orderdetail_heard" />
+
+                <TextView
+                    android:id="@+id/orderItemD_txt_Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:layout_toRightOf="@+id/orderItemD_img_seller"
+                    android:text="名字" />
+
+                <TextView
+                    android:id="@+id/orderItemD_txt_telNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/orderItemD_txt_Name"
+                    android:layout_toRightOf="@+id/orderItemD_img_seller"
+                     android:textColor="@color/black"
+                     android:layout_marginTop="5dp"
+                    android:text="15673288851" />
+
+                <TextView
+                    android:id="@+id/orderItemD_txt_illustrate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/orderItemD_txt_telNum"
+                    android:layout_toRightOf="@+id/orderItemD_img_seller"
+                    android:text="用户接受报价后，您才能看到手机号!"
+                    android:layout_marginTop="5dp"
+                    android:textColor="#9000"
+                    android:textSize="10sp" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="2dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:id="@+id/orderItemD_img_car"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/car" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="10dp" >
+
+                    <TextView
+                        android:id="@+id/orderItemD_txt_orderNum"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="订单号：1212112"
+                        android:textColor="@color/darkgray"
+                        android:visibility="gone"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/orderItemD_txt_seriesName"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:text="宝马5系GT12112"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/orderItemD_txt_guidePrice"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="12121121"
+                        android:textColor="@color/darkgray"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal" >
+
+                <LinearLayout
+                    android:id="@+id/orderItemD_rlt_color"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="首选颜色"
+                        android:textColor="@color/black"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/orderItemD_txt_carColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="酒红色"
+                        android:layout_marginTop="5dp"
+                        android:textColor="#6000"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/orderItemD_rlt_pay"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="付款方式"
+                        android:textColor="@color/black"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/orderItemD_txt_payMode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="全款"
+                        android:layout_marginTop="5dp"
+                        android:textColor="#6000"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/orderItemD_rlt_play"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="提车计划"
+                        android:textColor="@color/black"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/orderItemD_txt_carPlan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="三天内"
+                        android:layout_marginTop="5dp"
+                        android:textColor="#6000"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/orderItemD_rlt_city"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="上牌城市"
+                        android:textColor="@color/black"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/orderItemD_txt_carAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="本地牌"
+                        android:layout_marginTop="5dp"
+                        android:textColor="#6000"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </LinearLayout>
+            <View 
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:background="@color/main_background_gray"/>
+
+            <include layout="@layout/hline" />
+
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/white">
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:focusableInTouchMode="true"
+                android:paddingLeft="20dp" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/quote" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="立即抢单报价"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+          <View 
+                 android:layout_width="wrap_content"
+                 android:layout_height="1dp"
+                 android:layout_marginLeft="10dp"
+                 android:background="@color/main_background_gray"/>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                  >
+
+                <TextView
+                    style="@style/order_detial_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="#8000"
+                    android:text="裸车价格：" />
+
+                
+               <View 
+                   android:layout_width="0dp"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"/>
+
+                <com.chehui.maiche.custom.EditTextWithDel
+                    android:id="@+id/orderItemP_edt_carPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="@null"
+                    android:textSize="13sp"
+                    android:textColor="#8000"
+                    android:inputType="number"
+                    android:hint="请输入裸车价格"
+                    android:textColorHint="#4000"
+                    android:singleLine="true" />
+                <TextView
+                    style="@style/order_detial_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:textColor="#8000"
+                       android:layout_marginLeft="5dp"
+                    android:layout_marginRight="15dp"
+                     android:textSize="14sp"
+                    android:text="元" />
+            </LinearLayout>
+
+             <View 
+                 android:layout_width="wrap_content"
+                 android:layout_height="1dp"
+                 android:layout_marginLeft="10dp"
+                 android:background="@color/main_background_gray"/>
+            <!-- 车险 -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp" >
+
+                <TextView
+                    style="@style/order_detial_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="#8000"
+                    android:text="车险价格："
+                      />
+              <View 
+                   android:layout_width="0dp"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"/>
+               
+                   <com.chehui.maiche.custom.EditTextWithDel
+                    android:id="@+id/orderItemP_edt_insurPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="@null"
+                    android:textSize="13sp"
+                   android:textColor="#8000"
+                     android:inputType="number"
+                    android:hint="请输入裸车价格"
+                    android:textColorHint="#4000"
+                    android:singleLine="true" />
+                 <TextView
+                    style="@style/order_detial_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:textColor="#8000"
+                       android:layout_marginLeft="5dp"
+                    android:layout_marginRight="15dp"
+                     android:textSize="14sp"
+                    android:text="元" />
+            </LinearLayout>
+            <!-- 上牌 -->
+
+          <View 
+                 android:layout_width="wrap_content"
+                 android:layout_height="1dp"
+                 android:layout_marginLeft="10dp"
+                 android:background="@color/main_background_gray"/>
+
+             
+             <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp" >
+
+                <TextView
+                    style="@style/order_detial_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="#8000"
+                    android:text="上牌费用："
+                      />
+              <View 
+                   android:layout_width="0dp"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"/>
+               
+                   <com.chehui.maiche.custom.EditTextWithDel
+                    android:id="@+id/orderItemP_edt_licensePrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="@null"
+                    android:textSize="13sp"
+                     android:inputType="number"
+                    android:hint="请输入上牌费用"
+                    android:textColorHint="#4000"
+                    android:textColor="#8000"
+                    android:singleLine="true" />
+                 <TextView
+                    style="@style/order_detial_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:textColor="#8000"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="15dp"
+                     android:textSize="14sp"
+                    android:text="元" />
+            </LinearLayout>
+
+           <View 
+                 android:layout_width="wrap_content"
+                 android:layout_height="1dp"
+                 android:layout_marginLeft="10dp"
+                 android:background="@color/main_background_gray"/>
+            <!-- 购置税 -->
+ 
+                 
+             <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp" >
+
+                <TextView
+                    style="@style/order_detial_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="购置税："
+                    android:textColor="#8000"
+                      />
+              <View 
+                   android:layout_width="0dp"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"/>
+               
+                   <com.chehui.maiche.custom.EditTextWithDel
+                    android:id="@+id/orderItemP_edt_buyTax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="@null"
+                    android:textSize="13sp"
+                   android:textColor="#8000"
+                     android:inputType="number"
+                    android:hint="请输入购置税"
+                    android:textColorHint="#4000"
+                    android:singleLine="true" />
+                 <TextView
+                    style="@style/order_detial_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:textColor="#8000"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="15dp"
+                     android:textSize="14sp"
+                    android:text="元" />
+            </LinearLayout>
+
+        <View 
+                 android:layout_width="match_parent"
+                 android:layout_height="1dp"
+                 android:layout_marginLeft="10dp"
+                 android:background="@color/main_background_gray"/>
+            <!-- 其他杂费 -->
+
+          
+            
+               <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp" >
+
+                <TextView
+                    style="@style/order_detial_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="其他杂费："
+                    android:textColor="#8000"
+                      />
+              <View 
+                   android:layout_width="0dp"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"/>
+               
+                   <com.chehui.maiche.custom.EditTextWithDel
+                    android:id="@+id/orderItemP_edt_ortherCost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="@null"
+                    android:textSize="13sp"
+                android:textColor="#8000"
+                     android:inputType="number"
+                    android:hint="请输入其他杂费"
+                    android:textColorHint="#4000"
+                    android:singleLine="true" />
+                 <TextView
+                    style="@style/order_detial_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:textColor="#8000"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="15dp"
+                    android:textSize="14sp"
+                    android:text="元" />
+            </LinearLayout>
+
+        <View 
+                 android:layout_width="match_parent"
+                 android:layout_height="1dp"
+                 android:layout_marginLeft="10dp"
+                 android:background="@color/main_background_gray"/>
+            <!-- 额外赠送 -->
+ 
+             <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp" >
+
+                <TextView
+                    style="@style/order_detial_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="#8000"
+                    android:text="额外赠送："
+                      />
+              <View 
+                   android:layout_width="0dp"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"/>
+               
+                   <com.chehui.maiche.custom.EditTextWithDel
+                    android:id="@+id/orderItemP_edt_extralGift"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="@null"
+                    android:textSize="13sp"
+                    android:textColor="#8000"
+                    android:hint="请输入额外赠送的礼物（选填）"
+                    android:textColorHint="#4000"
+                    android:singleLine="true" />
+                  
+            </LinearLayout>
+
+         <View 
+                 android:layout_width="match_parent"
+                 android:layout_height="1dp"
+                 android:layout_marginLeft="10dp"
+                 android:background="@color/main_background_gray"/>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp" >
+
+                <TextView
+                    style="@style/order_detial_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                      android:textSize="15sp"
+                    android:textColor="#8000"
+                    android:text="提车时间 ：" />
+
+                <TextView
+                    style="@style/order_detial_gray"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/orderItemP_edt_drawCarTime"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:hint="选择提车时间"
+                    android:singleLine="true"
+                      android:textSize="14sp"
+                    android:textColor="#8000"
+                      />
+            </LinearLayout>
+
+            <View 
+                 android:layout_width="match_parent"
+                 android:layout_height="1dp"
+                 android:layout_marginLeft="10dp"
+                 android:background="@color/main_background_gray"/>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp" >
+
+                <TextView
+                    style="@style/order_detial_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                      android:textSize="15sp"
+                    android:textColor="#8000"
+                    android:text="有效期 ：" />
+
+                <TextView
+                    style="@style/order_detial_gray"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/orderItemP_edt_indate"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="center_horizontal"
+                    android:hint="有效期"
+                      android:textSize="14sp"
+                    android:textColor="#8000"
+                    android:singleLine="true"
+                     />
+            </LinearLayout>
+
+            <include layout="@layout/hline"
+                />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/orderItemD_btn_post"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/corners_login_btn_bg"
+                android:text="提交报价"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="left"
+                android:text="@string/order_detial_tips" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

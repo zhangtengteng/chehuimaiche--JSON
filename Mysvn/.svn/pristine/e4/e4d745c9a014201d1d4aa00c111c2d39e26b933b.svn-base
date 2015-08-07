@@ -1,0 +1,98 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_order_background"
+    android:orientation="vertical" >
+
+    <include layout="@layout/top_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:text="@string/vertify_phone"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/et_phone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/corners_bg"
+                android:paddingLeft="10dp"
+                android:inputType="number" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:text="@string/vertify_num"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/et_code"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="5"
+                android:paddingLeft="10dp"
+                android:background="@drawable/corners_bg"
+                android:inputType="number" />
+
+            <Button
+                android:id="@+id/btn_send_code"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="3"
+                android:background="@drawable/corners_bg_reg0_bule"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="@string/reg_user_send_code" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_commit"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/corners_login_btn_bg"
+        android:text="@string/feddback_commit"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+</LinearLayout>

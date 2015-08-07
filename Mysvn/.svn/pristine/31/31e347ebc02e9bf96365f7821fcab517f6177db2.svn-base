@@ -1,0 +1,379 @@
+package com.chehui.maiche.rabate;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+
+import com.chehui.maiche.BaseActivity;
+import com.chehui.maiche.R;
+import com.chehui.maiche.SharedPreManager;
+import com.chehui.maiche.comm.CommonData;
+import com.chehui.maiche.custom.PickerView.onSelectListener;
+import com.chehui.maiche.httpserve.HttpService;
+import com.chehui.maiche.pop.PoPBlandWindowManager;
+import com.chehui.maiche.utils.ToastUtils;
+import com.chehui.maiche.utils.Utils;
+
+/***
+ * 
+ * @author zzp
+ *         <P>
+ *         添加银行卡页面
+ *         <P>
+ * 
+ */
+public class RabateAddBankcardActivity extends BaseActivity implements
+		OnClickListener {
+	// PopupWindow对象
+	private PopupWindow selectPopupWindow = null;
+	// // 自定义Adapter
+	// private OptionsAdapter optionsAdapter = null;
+	private ArrayAdapter<String> adapter;
+	// 下拉框选项数据源
+	private ArrayList<String> datas = new ArrayList<String>();;
+	// 下拉框依附组件
+	private LinearLayout rabate_bankname_layout;
+	// 下拉框依附组件宽度，也将作为下拉框的宽度
+	private int pwidth;
+	// 展示所有下拉选项的ListView
+	private ListView listbankname = null;
+	// 是否初始化完成标志
+	private boolean flag = false;
+
+	/** 添加完成 */
+	private Button btnAddComplete;
+	private EditText edtHolder;
+	private EditText edtBankcardNum;
+	private TextView edt_bankname;
+	private EditText edt_telnumber;
+
+	private String bankName;
+	private String bankcardNum;
+	private String telNum;
+	private String holder;
+	private int sellerid;
+	private String postPramas;
+
+	private String json;
+
+	private Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case CommonData.HTTP_HANDLE_FAILE:
+
+				Bundle data = msg.getData();
+				String result = data.getString("mess");
+				ToastUtils.showShortToast(RabateAddBankcardActivity.this,
+						result);
+
+				break;
+			case CommonData.HTTP_HANDLE_SUCCESS:
+
+				break;
+			default:
+				break;
+			}
+		}
+	};
+
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_rabate_bankcark_add);
+		initTitleView(-1, 255, R.string.set_account_add_bank_card, 255, -1, 0);
+		sellerid = SharedPreManager.getInstance()
+				.getInt(CommonData.USER_ID, 72);
+		initViews();
+
+	}
+
+	private void initViews() {
+		Typeface typeFace = Typeface.createFromAsset(getAssets(),
+				"fonts/ChanticleerRomanNF.ttf");
+		btnAddComplete = (Button) findViewById(R.id.rabate_add_btn_complete);
+		btnAddComplete.setOnClickListener(this);
+		edtHolder = (EditText) findViewById(R.id.rabate_add_edt_holder);
+		edtBankcardNum = (EditText) findViewById(R.id.rabate_add_edt_cardnum);
+		edt_telnumber = (EditText) findViewById(R.id.rabate_add_edt_telnumber);
+		edt_bankname = (TextView) findViewById(R.id.rabate_add_edt_bankname);
+		edtHolder.setTypeface(typeFace);
+		edtBankcardNum.setTypeface(typeFace);
+		edt_telnumber.setTypeface(typeFace);
+		edt_bankname.setTypeface(typeFace);
+		edt_bankname.setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.rabate_add_btn_complete:
+			bankName = edt_bankname.getText().toString().trim();
+			bankcardNum = edtBankcardNum.getText().toString().trim();
+			telNum = edt_telnumber.getText().toString().trim();
+			holder = edtHolder.getText().toString().trim();
+
+			if (bankcardNum != null || bankName != null || telNum != null
+					|| holder != null) {
+				postPramas = bankcardNum + "|" + String.valueOf(sellerid) + "|"
+						+ bankName + "|" + holder + "|" + telNum;
+
+				addBankCard(postPramas);
+			} else {
+				ToastUtils.showShortToast(RabateAddBankcardActivity.this,
+						"请将信息填写完整");
+				return;
+			}
+
+			break;
+
+		case R.id.rabate_add_edt_bankname:
+			// 设置点击弹出PopupWindow浮动下拉框
+			if (flag) {
+				// 显示PopupWindow窗口
+				setBankName(edt_bankname);
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+	/**
+	 * 添加银行卡
+	 * 
+	 * @param params
+	 */
+	private void addBankCard(final String postParams) {
+
+		if (!Utils.isNetworkAvailable(RabateAddBankcardActivity.this)) {
+			ToastUtils.showShortToast(RabateAddBankcardActivity.this,
+					R.string.common_network_unavalible);
+			return;
+		}
+
+		new AsyncTask<Void, Integer, String>() {
+
+			@Override
+			protected String doInBackground(Void... params) {
+				// 请求服务器
+				final List<BasicNameValuePair> parameters = new ArrayList<BasicNameValuePair>();
+				parameters.add(new BasicNameValuePair("classname",
+						"BankService"));
+				parameters.add(new BasicNameValuePair("methodname",
+						"AddBankCard"));
+				parameters.add(new BasicNameValuePair("params", postParams));
+
+				Log.d("查看参数类型", parameters.toString());
+				String response = HttpService.methodPost(CommonData.HTTP_URL,
+						parameters);
+				return response;
+			}
+
+			@Override
+			protected void onPostExecute(String result) {
+
+				super.onPostExecute(result);
+				json = result.toString();
+				Log.d("返回银行卡列表", json);
+
+				analysisJson();
+			}
+
+		}.execute();
+	}
+
+	/**
+	 * 解析json数据
+	 */
+	private void analysisJson() {
+		try {
+			JSONObject jsonObject = new JSONObject(json);
+			Boolean success = jsonObject.getBoolean("Success");
+			String mess = jsonObject.getString("Mess");
+			if (success == true) {
+				startNextActivity();
+			} else {
+				Message msg = handler
+						.obtainMessage(CommonData.HTTP_HANDLE_FAILE);
+				Bundle data = msg.getData();
+				data.putString("mess", mess);
+				handler.sendMessage(msg);
+				return;
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * 跳转下一个界面
+	 */
+	private void startNextActivity() {
+		Intent intent = new Intent(RabateAddBankcardActivity.this,
+				RabateAddCompleteActivity.class);
+		startActivity(intent);
+		finish();
+
+	}
+	
+	/**
+	 * 选择银行卡
+	 * @param view
+	 *           填写银行卡的TextView
+	 */
+	private void setBankName(final TextView view) {
+		datas.clear();
+		datas.add("中国银行");
+		datas.add("工商银行");
+		datas.add("建设银行");
+		datas.add("农业银行");
+		datas.add("招商银行");
+		datas.add("华夏银行");
+
+		PoPBlandWindowManager.getInstance().setPickViewData(datas);
+		PoPBlandWindowManager.getInstance()
+				.changeOnSelect(new onSelectListener() {
+
+					@Override
+					public void onSelect(final String text) {
+						PoPBlandWindowManager.getInstance().changeOnClick(new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								 view.setText(text);
+								 PoPBlandWindowManager.getInstance().dismissPop();
+								
+							}
+						});
+					}
+				});
+		setPopWidth();
+		PoPBlandWindowManager.getInstance().showPopAllLocation(view,
+				Gravity.CENTER | Gravity.BOTTOM, 0, 0);
+
+	}
+
+	/***
+	 * 设置底部滑动pop
+	 */
+	private void setPopWidth() {
+		@SuppressWarnings("deprecation")
+		int width = getWindowManager().getDefaultDisplay().getWidth();
+		@SuppressWarnings({ "deprecation", "unused" })
+		int height = getWindowManager().getDefaultDisplay().getHeight();
+		PoPBlandWindowManager.getInstance().init(getApplicationContext(), width,
+				400, R.layout.pop_bland);
+	}
+	
+
+	/**
+	 * 初始化PopupWindow
+	 */
+	private void initPopuWindow() {
+		// 初始化数据
+		datas.clear();
+		datas.add("中国银行");
+		datas.add("工商银行");
+		datas.add("建设银行");
+		datas.add("农业银行");
+		datas.add("招商银行");
+		datas.add("华夏银行");
+
+		// PopupWindow浮动下拉框布局
+		View loginwindow = (View) this.getLayoutInflater().inflate(
+				R.layout.options, null);
+		listbankname = (ListView) loginwindow.findViewById(R.id.list);
+
+		// // 设置自定义Adapter
+		// optionsAdapter = new OptionsAdapter(this, handler, datas);
+		adapter = new ArrayAdapter<String>(this, R.layout.option_bankname_item,
+				R.id.option_txt_bankname, datas);
+		listbankname.setAdapter(adapter);
+		selectPopupWindow = new PopupWindow(loginwindow, pwidth,
+				LayoutParams.WRAP_CONTENT, true);
+		selectPopupWindow.setOutsideTouchable(true);
+		// 这一句是为了实现弹出PopupWindow后，当点击屏幕其他部分及Back键时PopupWindow会消失，
+		selectPopupWindow.setBackgroundDrawable(new BitmapDrawable());
+	}
+
+	/**
+	 * 显示PopupWindow窗口
+	 * 
+	 * @param popupwindow
+	 */
+	public void popupWindwShowing() {
+		// 将selectPopupWindow作为parent的下拉框显示，并指定selectPopupWindow在Y方向上向上偏移3pix，
+		// 这是为了防止下拉框与文本框之间产生缝隙，影响界面美化
+		selectPopupWindow.showAsDropDown(rabate_bankname_layout, 0, -3);
+	}
+
+	/**
+	 * PopupWindow消失
+	 */
+	public void dismiss() {
+		selectPopupWindow.dismiss();
+	}
+
+	/**
+	 * 没有在onCreate方法中调用initWedget()，而是在onWindowFocusChanged方法中调用，
+	 * 是因为initWedget()中需要获取PopupWindow浮动下拉框依附的组件宽度，在onCreate方法中是无法获取到该宽度的
+	 */
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		while (!flag) {
+			initWedget();
+			flag = true;
+		}
+	}
+
+	/**
+	 * 初始化Pop
+	 */
+	private void initWedget() {
+		rabate_bankname_layout = (LinearLayout) findViewById(R.id.rabate_bankname_layout);
+		// 获取下拉框依附的组件宽度
+		int width = rabate_bankname_layout.getWidth();
+		pwidth = width;
+		// 初始化PopupWindow
+		initPopuWindow();
+
+		listbankname.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				edt_bankname.setText(datas.get(position));
+				selectPopupWindow.dismiss();
+
+			}
+		});
+
+	}
+}

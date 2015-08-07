@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/main_background_gray"
+    android:orientation="vertical" >
+
+    <RadioGroup
+        android:id="@+id/myOrder_btn_menu"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:background="#ffffff"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/myOrder_btn_all"
+            style="@style/TabMenuText"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:checked="true"
+            android:drawableTop="@drawable/selector_order_all"
+            android:focusable="true"
+            android:textColor="@color/black" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/little_gray" />
+
+        <RadioButton
+            android:id="@+id/myOrder_btn_waitAccept"
+            style="@style/TabMenuText"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/selector_order_notpay"
+            android:gravity="center"
+            android:textColor="@color/black" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/little_gray" />
+
+        <RadioButton
+            android:id="@+id/myOrder_btn_hadAccept"
+            style="@style/TabMenuText"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/selector_order_pay"
+            android:gravity="center"
+            android:textColor="@color/black" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/little_gray" />
+
+        <RadioButton
+            android:id="@+id/myOrder_btn_hadTransac"
+            style="@style/TabMenuText"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/selector_order_buy"
+            android:gravity="center"
+            android:textColor="@color/black" />
+    </RadioGroup>
+
+</LinearLayout>

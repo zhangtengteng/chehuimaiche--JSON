@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_order_background" >
+
+    <include
+        android:id="@+id/top_btn"
+        layout="@layout/myorder_topbtn_layout" />
+
+    <com.chehui.maiche.myorder.PullToRefreshListView
+        android:divider="@null"
+        android:id="@+id/myOrder_frag_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top_btn" />
+
+</RelativeLayout>
