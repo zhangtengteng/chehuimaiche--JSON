@@ -317,7 +317,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:hint="1"
                         android:singleLine="true"
                         android:textColor="#000" />
 
@@ -370,7 +369,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:hint="1"
                         android:singleLine="true"
                         android:textColor="#000" />
 
@@ -424,7 +422,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:hint="1"
                         android:singleLine="true"
                         android:textColor="#000" />
 
@@ -478,7 +475,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:hint="1"
                         android:singleLine="true"
                         android:textColor="#000" />
 
@@ -531,7 +527,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:hint="1"
                         android:singleLine="true"
                         android:textColor="#000" />
 
@@ -569,19 +564,16 @@
                         android:textColor="#9000"
                         android:textSize="15sp" />
 
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1" />
 
                     <TextView
+                        android:gravity="right"
+                        android:layout_weight="1"
                         android:id="@+id/myOrderDetail_txt_extralGift"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="15dp"
                         android:singleLine="true"
-                        android:text="/"
                         android:textColor="#000" />
                 </LinearLayout>
 
@@ -606,12 +598,10 @@
                         android:textColor="#9000"
                         android:textSize="15sp" />
 
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1" />
 
                     <TextView
+                        android:gravity="right"
+                        android:layout_weight="1"
                         android:id="@+id/myOrderDetail_txt_drawCarTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

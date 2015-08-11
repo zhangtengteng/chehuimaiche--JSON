@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -71,21 +72,22 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 	private List<Map<String, String>> listWait = new ArrayList<Map<String, String>>();
 	/** 已接受 */
 	private List<Map<String, String>> listAccept = new ArrayList<Map<String, String>>();
-	/** 已接受 */
+	/** 已成交 */
 	private List<Map<String, String>> listOk = new ArrayList<Map<String, String>>();
 	private int currentIndex;
 	private Map<String, String> map;
 
 	private MyOrderAdapter adapter;
 
-	private RadioButton btn_all;
+	private Button btn_all;
 
-	private RadioButton btn_waitAccept;
+	private Button btn_waitAccept;
 
-	private RadioButton btn_hadAccept;
+	private Button btn_hadAccept;
 
-	private RadioButton btn_hadTransac;
-
+	private Button btn_hadTransac;
+	
+	private Button currentSelectedView;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -95,26 +97,41 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 
 		initWidget();
 
+		initData();
+
+		getMyOrderData(params);
+		// 全部报价
+		allOrder();
+
 		return mInflater;
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart();
-		initData();
+		if (CommonData.ISMODIFYPRICE == true
+				|| CommonData.ISMYORDERFRAGMENTREFRESH == true) {
+			initData();
+			getMyOrderData(params);
+			// 全部报价
+			allOrder();
+			CommonData.ISMODIFYPRICE = false;
+			CommonData.ISMYORDERFRAGMENTREFRESH = false;
+		}
 
-		getMyOrderData(params);
-		// 全部报价
-		allOrder();
+		if(currentSelectedView==null){
+			currentSelectedView=btn_all;
+			btn_all.setSelected(true);
+		}
 	}
 
 	private void initWidget() {
-		btn_all = (RadioButton) mInflater.findViewById(R.id.myOrder_btn_all);
-		btn_waitAccept = (RadioButton) mInflater
+		btn_all = (Button) mInflater.findViewById(R.id.myOrder_btn_all);
+		btn_waitAccept = (Button) mInflater
 				.findViewById(R.id.myOrder_btn_waitAccept);
-		btn_hadAccept = (RadioButton) mInflater
+		btn_hadAccept = (Button) mInflater
 				.findViewById(R.id.myOrder_btn_hadAccept);
-		btn_hadTransac = (RadioButton) mInflater
+		btn_hadTransac = (Button) mInflater
 				.findViewById(R.id.myOrder_btn_hadTransac);
 
 		btn_all.setOnClickListener(this);
@@ -180,7 +197,7 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 						String CarAddress = list.get(position)
 								.get("CarAddress");
 						String FloorPriceCN = list.get(position).get(
-								"FloorPriceCN");
+								"FloorPrice");
 						String InsurancePrice = list.get(position).get(
 								"InsurancePrice");
 						String LicensePrice = list.get(position).get(
@@ -368,6 +385,7 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 					map.put("Cityname", Cityname);
 					map.put("FloorPrice", FloorPrice);
 					map.put("FloorPriceCN", FloorPriceCN);
+					System.out.println(FloorPrice+"++++++++++++++++++++"+FloorPriceCN);
 					map.put("InsurancePrice", InsurancePrice);
 					map.put("LicensePrice", LicensePrice);
 					map.put("PurchaseTax", PurchaseTax);
@@ -597,21 +615,33 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 		case R.id.myOrder_btn_all:
 			currentIndex = 0;
 			setData(list);
+			setIndexSelected();
+			btn_all.setSelected(true);
+			currentSelectedView=btn_all;
 			break;
 		// 待接受
 		case R.id.myOrder_btn_waitAccept:
 			currentIndex = 1;
 			setData(listWait);
+			setIndexSelected();
+			btn_waitAccept.setSelected(true);
+			currentSelectedView=btn_waitAccept;
 			break;
 		// 已接受
 		case R.id.myOrder_btn_hadAccept:
 			currentIndex = 2;
 			setData(listAccept);
+			setIndexSelected();
+			btn_hadAccept.setSelected(true);
+			currentSelectedView=btn_hadAccept;
 			break;
 		// 已交易
 		case R.id.myOrder_btn_hadTransac:
 			currentIndex = 3;
 			setData(listOk);
+			setIndexSelected();
+			btn_hadTransac.setSelected(true);
+			currentSelectedView=btn_hadTransac;
 			break;
 
 		default:
@@ -628,4 +658,11 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 			adapter.setData(list);
 		}
 	}
+	
+	private void setIndexSelected(){
+		if(currentSelectedView!=null){
+			currentSelectedView.setSelected(false);
+		}
+	}
+	
 }

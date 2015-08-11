@@ -20,7 +20,7 @@ public class SetupMessageSetActivity extends BaseActivity implements
 
 	private void init() {
 		WiperSwitch wiperSwitch = (WiperSwitch) findViewById(R.id.wiperSwitchMessage);
-		wiperSwitch.setChecked(false);
+		wiperSwitch.setChecked(true);
 		wiperSwitch.setOnChangedListener(this);
 	}
 

@@ -11,7 +11,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
+import cn.jpush.android.api.JPushInterface;
+
 import com.chehui.maiche.R;
+import com.chehui.maiche.utils.LogN;
+import com.chehui.maiche.utils.ToastUtils;
 
 public class WiperSwitch extends View implements OnTouchListener {
 	private Bitmap btOn, btOff, slipperBtn;
@@ -52,6 +56,7 @@ public class WiperSwitch extends View implements OnTouchListener {
 		slipperBtn = BitmapFactory.decodeResource(getResources(),
 				R.drawable.white_btn);
 		setOnTouchListener(this);
+		setChecked(true);
 	}
 
 	@Override
@@ -66,9 +71,11 @@ public class WiperSwitch extends View implements OnTouchListener {
 		if (nowX < (btOn.getWidth() / 2 -13)) {
 			// 画出关闭时的背景
 			canvas.drawBitmap(btOff, matrix, paint);
+			JPushInterface.stopPush(getContext());
 		} else {
 			// 画出打开时的背景
 			canvas.drawBitmap(btOn, matrix, paint);
+			JPushInterface.resumePush(getContext());
 		}
 
 		if (onSlip) {// 是否是在滑动状态,

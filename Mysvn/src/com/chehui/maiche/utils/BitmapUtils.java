@@ -1,6 +1,10 @@
 package com.chehui.maiche.utils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -140,5 +144,33 @@ public class BitmapUtils {
 		} else {
 			return upperBound;
 		}
+	}
+
+	/***
+	 * 保存bitmap到本地 返回路径
+	 * @param bm
+	 * @param picName
+	 * @return
+	 */
+	public static String saveBitmap(Bitmap bm, String picName) {
+		String innerSDCardPath = FilePathUtils.getInnerSDCardPath();
+		File f = new File(innerSDCardPath+"/", picName);
+		LogN.e(BitmapUtils.class, "innerSDCardPath is  "+innerSDCardPath);
+		if (f.exists()) {
+			f.delete();
+		}
+		try {
+			FileOutputStream out = new FileOutputStream(f);
+			bm.compress(Bitmap.CompressFormat.JPEG, 90, out);
+			out.flush();
+			out.close();
+			LogN.e (BitmapUtils.class, "saveBitmap success");
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return f.getPath();
 	}
 }

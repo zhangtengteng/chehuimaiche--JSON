@@ -1,10 +1,13 @@
 package com.chehui.maiche.setup;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.jinouts.xml.bind.DatatypeConverter;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
@@ -14,8 +17,8 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -32,7 +35,7 @@ import com.chehui.maiche.BaseActivity;
 import com.chehui.maiche.R;
 import com.chehui.maiche.SharedPreManager;
 import com.chehui.maiche.comm.CommonData;
-import com.chehui.maiche.utils.FilePathUtils;
+import com.chehui.maiche.utils.BitmapUtils;
 import com.chehui.maiche.utils.LogN;
 import com.chehui.maiche.utils.ToastUtils;
 
@@ -54,6 +57,8 @@ public class SetupUploadPic extends BaseActivity {
 
 	private ImageView identify_pic, business_pic;
 	private Bitmap bitmap;
+
+	private int d;
 	/* 接口 */
 	private static final String NAMESPACE = "http://ws.maichetong.chehui.com/";
 	private static final String METHODNAME = "UploadImg";
@@ -67,19 +72,19 @@ public class SetupUploadPic extends BaseActivity {
 	/* 图片名称 */
 	private static final String PHOTO_FILE_NAME = "temp_photo";
 	private File tempFile;
-	private String filePath1;
-	private String filePath2;
-
+	private String fileBytes1;
+	private String fileBytes2;
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case 1:
 				ToastUtils.showShortToast(getApplicationContext(), "第一张上传成功");
-				uploadImg(filePath2,2);
+				uploadImg(fileBytes2, 2);
 				break;
 			case 2:
 				ToastUtils.showShortToast(getApplicationContext(), "第二张上传成功");
-				startActivity(new Intent(SetupUploadPic.this,SetupUploadSuccess.class));
+				startActivity(new Intent(SetupUploadPic.this,
+						SetupUploadSuccess.class));
 				SetupUploadPic.this.finish();
 				break;
 			case CommonData.HTTP_HANDLE_FAILE:
@@ -147,35 +152,15 @@ public class SetupUploadPic extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-
-				new AsyncTask<Void, Integer, String>() {
-
-					@Override
-					protected String doInBackground(Void... params) {
-						String mResult = null;
-						try {
-							// mResult = uploadFile(tempFile, userName,
-							// SFZ_number, 1 + "", sellerid + "");
-							if (tempFile != null) {
-								uploadImg(filePath1,1);
-							}
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-						return mResult;
-					}
-
-					@Override
-					protected void onPostExecute(String result) {
-						// System.out.println(result.toString());
-						// if (!StringUtils.isEmpty(result)
-						// && result.toString().equals("true")) {
-						// Intent intent = new Intent(SetupUploadPic.this,
-						// SetupUploadSuccess.class);
-						// startActivity(intent);
-						// }
-					}
-				}.execute();
+				if(fileBytes1==null||fileBytes2==null){
+					ToastUtils.showShortToast(getApplicationContext(), "请选择要上传的图片！");
+					return;
+				}
+				if(fileBytes1.equals("")||fileBytes2.equals("")){
+					ToastUtils.showShortToast(getApplicationContext(), "请选择要上传的图片！");
+					return;
+				}
+				uploadImg(fileBytes1, 1);
 			}
 		});
 	}
@@ -196,7 +181,7 @@ public class SetupUploadPic extends BaseActivity {
 					intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri
 							.fromFile(new File(Environment
 									.getExternalStorageDirectory(),
-									PHOTO_FILE_NAME+i+".jpg")));
+									PHOTO_FILE_NAME + i + ".jpg")));
 				}
 				startActivityForResult(intent, PHOTO_REQUEST_CAMERA);
 				mPopView.dismiss();
@@ -222,25 +207,17 @@ public class SetupUploadPic extends BaseActivity {
 			if (data != null) {
 				// 得到图片的全路径
 				Uri uri = data.getData();
-				if(i==1){
-					filePath1 = getRealPathFromURI(uri);
-				}else{
-					filePath2= getRealPathFromURI(uri);
-				}
 				tempFile = new File(getRealPathFromURI(uri));
+				d = 1;
 				crop(uri);
 			}
 
 		} else if (requestCode == PHOTO_REQUEST_CAMERA) {
 			if (hasSdcard()) {
 				tempFile = new File(Environment.getExternalStorageDirectory(),
-						PHOTO_FILE_NAME+i+".jpg");
+						PHOTO_FILE_NAME + i + ".jpg");
 				Uri uri = Uri.fromFile(tempFile);
-				if(i==1){
-					filePath1 = tempFile.getPath();
-				}else{
-					filePath2= tempFile.getPath();
-				}
+				d = 2;
 				crop(uri);
 			} else {
 				ToastUtils.showShortToast(getApplicationContext(),
@@ -249,16 +226,25 @@ public class SetupUploadPic extends BaseActivity {
 
 		} else if (requestCode == PHOTO_REQUEST_CUT) {
 			try {
-				bitmap = data.getParcelableExtra("data");
+				if (d == 1)
+					bitmap = data.getParcelableExtra("data");
+				else {
+					Bundle bundle = data.getExtras();
+					if (bundle != null) {
+						bitmap = (Bitmap) bundle.get("data");
+					}
+				}
+				String path = PHOTO_FILE_NAME + i + ".jpg";
+				LogN.e(SetupUploadPic.class, "path is =" + path);
 				if (i == 1) {
 					this.identify_pic.setImageBitmap(bitmap);
 					identify_select.setVisibility(View.GONE);
+					fileBytes1 = BitmapUtils.bitmapToBase64(bitmap);
 				} else if (i == 2) {
 					this.business_pic.setImageBitmap(bitmap);
 					business_select.setVisibility(View.GONE);
+					fileBytes2 = BitmapUtils.bitmapToBase64(bitmap);
 				}
-				boolean delete = tempFile.delete();
-				System.out.println("delete = " + delete);
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -290,35 +276,6 @@ public class SetupUploadPic extends BaseActivity {
 		startActivityForResult(intent, PHOTO_REQUEST_CUT);
 	}
 
-	public static String uploadFile(File file, String userName, String SFZ,
-			String index, String id) throws Exception {
-		SoapObject soapObject = new SoapObject(NAMESPACE, METHODNAME);
-		soapObject.addAttribute("fileBytes", encodeBase64File(file));
-		soapObject.addAttribute("sellerid", id);
-		soapObject.addAttribute("surfix", "JPEG");
-		soapObject.addAttribute("img_index", index);
-		soapObject.addAttribute("RealName", userName);
-		soapObject.addAttribute("SFZ", SFZ);
-
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-		envelope.dotNet = true;
-		envelope.setOutputSoapObject(soapObject);
-		HttpTransportSE httpTransportSE = new HttpTransportSE(endPoint);
-
-		try {
-			httpTransportSE.call(SOAPACTION, envelope);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (XmlPullParserException e) {
-			e.printStackTrace();
-		}
-
-		SoapObject object = (SoapObject) envelope.bodyIn;
-		// 获取返回的结果
-		String result = object.getProperty(0).toString();
-		return result;
-	}
 
 	/**
 	 * 判断SD卡是否存在
@@ -334,26 +291,6 @@ public class SetupUploadPic extends BaseActivity {
 		}
 	}
 
-	/**
-	 * 把图片转换为Base64的流
-	 * 
-	 * @return
-	 */
-	private static String bitmapToByte(Bitmap bitmap) {
-		ByteArrayOutputStream out = null;
-		try {
-			out = new ByteArrayOutputStream();
-			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-			out.flush();
-			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		byte[] buffer = out.toByteArray();
-		byte[] encode = Base64.encode(buffer, Base64.DEFAULT);
-		return new String(encode);
-	}
 
 	/**
 	 * 转换成file
@@ -389,10 +326,12 @@ public class SetupUploadPic extends BaseActivity {
 		byte[] buffer = new byte[(int) file.length()];
 		inputFile.read(buffer);
 		inputFile.close();
-		return Base64.encodeToString(buffer, Base64.DEFAULT);
+		// return Base64.encodeToString(buffer, Base64.DEFAULT);
+		return DatatypeConverter.printBase64Binary(Base64.encodeToString(
+				buffer, Base64.DEFAULT).getBytes());
 	}
 
-	public void uploadImg(final String filePath,final int index) {
+	public void uploadImg(final String filePath, final int i) {
 		new Thread(new Runnable() {
 
 			@Override
@@ -408,13 +347,19 @@ public class SetupUploadPic extends BaseActivity {
 				// 指定WebService的命名空间和调用方法
 				SoapObject soapObject = new SoapObject(nameSpace, methodName);
 				// 设置需要调用WebService接口的两个参数mobileCode UserId
-				soapObject.addProperty("fileBytes",
-						FilePathUtils.getBytes(filePath));
 				int id = SharedPreManager.getInstance().getInt(
 						CommonData.USER_ID, -1);
+				// String fileBytes =
+				// BitmapUtils.bitmapToBase64(BitmapFactory.decodeFile(filePath));
+				if (i == 1) {
+					soapObject.addProperty("fileBytes", fileBytes1);
+				} else{
+					soapObject.addProperty("fileBytes", fileBytes2);
+				}
+
 				soapObject.addProperty("sellerid", id);
 				soapObject.addProperty("surfix", "JPEG");
-				soapObject.addProperty("img_index", String.valueOf(index));
+				soapObject.addProperty("img_index", String.valueOf(i));
 				soapObject.addProperty("SFZ", SFZ_number);
 				soapObject.addProperty("RealName", userName);
 				// 生成调用WebService方法调用的soap信息，并且指定Soap版本
@@ -441,14 +386,14 @@ public class SetupUploadPic extends BaseActivity {
 				System.out.println("result ----------" + result);
 				Message message = handler.obtainMessage();
 				message.obj = result;
-				if(result.indexOf("true")>0){
-					message.what=index;
-				}else{
-					message.what=CommonData.HTTP_HANDLE_FAILE;
+				if (result.indexOf("true") > 0) {
+					message.what = i;
+				} else {
+					message.what = CommonData.HTTP_HANDLE_FAILE;
 				}
-				
 				handler.sendMessage(message);
 			}
 		}).start();
 	}
+
 }
