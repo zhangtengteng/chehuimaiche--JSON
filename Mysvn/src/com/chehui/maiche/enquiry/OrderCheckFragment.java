@@ -146,7 +146,6 @@ public class OrderCheckFragment extends BaseFragment {
 				|| CommonData.ISORDERCOMPELETED == true) {
 			initData();
 			getOrderByBrands(postParams);
-
 			CommonData.MODIFYUSERFLAG = true;
 			CommonData.ISORDERCOMPELETED = false;
 		}
@@ -224,6 +223,7 @@ public class OrderCheckFragment extends BaseFragment {
 					json = result.toString();
 					Log.d("返回询价数据", json);
 					baojiaNumber = 0;
+					CommonData.tvNumber.setVisibility(View.INVISIBLE);
 					analysisJson();
 				} else {
 					ToastUtils.showShortToast(getActivity(), "加载数据失败!");
@@ -276,8 +276,7 @@ public class OrderCheckFragment extends BaseFragment {
 					if (!item.optBoolean("IsBaojia")) {
 						baojiaNumber++;
 					}
-					CommonData.tvNumber.setVisibility(View.VISIBLE);
-					CommonData.tvNumber.setText(String.valueOf(baojiaNumber));
+					
 					int orderId = item.optInt("OrderID");// 下级界面需要
 
 					map = new HashMap<String, String>(); // 存放到MAP里面
@@ -300,7 +299,12 @@ public class OrderCheckFragment extends BaseFragment {
 					}
 
 				}
-				CommonData.tvNumber.setText(String.valueOf(baojiaNumber));
+				if(baojiaNumber>0){
+					CommonData.tvNumber.setVisibility(View.VISIBLE);
+					CommonData.tvNumber.setText(String.valueOf(baojiaNumber));
+				}else{
+					CommonData.tvNumber.setVisibility(View.INVISIBLE);
+				}
 			} else {
 
 				ToastUtils.showShortToast(
