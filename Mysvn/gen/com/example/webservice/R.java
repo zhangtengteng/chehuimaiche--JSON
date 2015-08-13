@@ -15,13 +15,13 @@ public final class R {
 		public static final int ic_launcher = 0x7f020028;
 	}
 	public static final class id {
-		public static final int action_settings = 0x7f0c01d1;
+		public static final int action_settings = 0x7f0c01d8;
 	}
 	public static final class layout {
-		public static final int activity_main = 0x7f03000f;
+		public static final int activity_main = 0x7f030011;
 	}
 	public static final class menu {
-		public static final int main = 0x7f0b0003;
+		public static final int main = 0x7f0b0004;
 	}
 	public static final class string {
 		public static final int action_settings = 0x7f070001;
