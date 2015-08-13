@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.chehui.maiche"
-    android:installLocation="preferExternal"
+    android:installLocation="auto"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -14,6 +14,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
+    <!-- 拨打电话 -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <!-- 读取信息 -->
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
@@ -294,7 +296,7 @@
         <!-- Required. AppKey copied from Portal -->
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="fea1e0bde75c858452d604d5" />
+            android:value="6723cc2943be48229a48abf7" />
 
         <activity
             android:name=".login.LoginQuestionActicity"
@@ -321,6 +323,13 @@
             android:name="com.chehui.maiche.login.LoginDealActivity"
             android:launchMode="singleTask" >
         </activity>
+         <activity
+            android:name="com.chehui.maiche.myorder.MyOderUploadInvoice"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="com.chehui.maiche.myorder.MyOrderInvoiceSuccess"
+            android:launchMode="singleTask" >
+        </activity>
     </application>
-
 </manifest>
