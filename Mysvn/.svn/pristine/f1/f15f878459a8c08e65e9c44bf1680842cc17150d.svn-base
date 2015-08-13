@@ -116,11 +116,9 @@ public class OrderCheckFragment extends BaseFragment {
 		 */
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
-			@SuppressWarnings("deprecation")
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// 需要用户sellerId 和OrderId
-				view.setBackground(getResources().getDrawable(R.drawable.item_selector));
 				String orderID = list.get(position).get("orderId");
 				Intent intent = new Intent(getActivity().getApplicationContext(), OrderItemDetail.class);
 				intent.putExtra("vipLevel", String.valueOf(vipLevel));

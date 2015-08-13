@@ -45,7 +45,7 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
     <application
-        android:name=".comm.MyApplication"
+        android:name="com.chehui.maiche.comm.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
@@ -117,7 +117,7 @@
             android:name=".rabate.RabateDetailAccountActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".login.LoginChangePwd"
+            android:name="com.chehui.maiche.login.LoginChangePwd"
             android:launchMode="singleTask" />
 
         <!-- 设置界面 -->
@@ -206,7 +206,7 @@
             android:launchMode="singleTask" >
         </activity>
         <activity
-            android:name=".login.RegSelectBrandActivity"
+            android:name="com.chehui.maiche.login.RegSelectBrandActivity"
             android:launchMode="singleTask" >
         </activity>
         <!-- Required -->
@@ -245,7 +245,7 @@
         </receiver>
         <!-- Required SDK核心功能 -->
         <!-- User defined.  For test only  用户自定义的广播接收器 -->
-        <receiver android:name=".jpush.MyReceiver" >
+        <receiver android:name="com.chehui.maiche.jpush.MyReceiver" >
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.REGISTRATION" />
                 <!-- Required  用户注册SDK的intent -->
@@ -304,37 +304,32 @@
             android:launchMode="singleTask" >
         </activity>
         <activity
-            android:name=".login.LoginVerifyActiivty"
+            android:name="com.chehui.maiche.login.LoginVerifyActiivty"
             android:launchMode="singleTask" >
         </activity>
         <activity
-            android:name=".rabate.RabateSelectCardActivity"
+            android:name="com.chehui.maiche.rabate.RabateSelectCardActivity"
             android:launchMode="singleTask" >
         </activity>
         <activity
-            android:name=".rabate.RabateVertifyActivity"
+            android:name="com.chehui.maiche.rabate.RabateVertifyActivity"
             android:launchMode="singleTask" >
         </activity>
         <activity
-            android:name=".rabate.RabateCommitFinishActivity"
+            android:name="com.chehui.maiche.rabate.RabateCommitFinishActivity"
             android:launchMode="singleTask" >
         </activity>
         <activity
-            android:name=".login.LoginDealActivity"
+            android:name="com.chehui.maiche.login.LoginDealActivity"
+            android:launchMode="singleTask" >
+        </activity>
+         <activity
+            android:name="com.chehui.maiche.myorder.MyOderUploadInvoice"
             android:launchMode="singleTask" >
         </activity>
         <activity
-            android:name=".myorder.MyOderUploadInvoice"
+            android:name="com.chehui.maiche.myorder.MyOrderInvoiceSuccess"
             android:launchMode="singleTask" >
-        </activity>
-        <activity
-            android:name=".myorder.MyOrderInvoiceSuccess"
-            android:launchMode="singleTask" >
-        </activity>
-        <activity
-            android:name="com.chehui.maiche.setup.SetupFeedbackSuccess"
-            android:label="@string/title_activity_feedback_success" >
         </activity>
     </application>
-
 </manifest>
