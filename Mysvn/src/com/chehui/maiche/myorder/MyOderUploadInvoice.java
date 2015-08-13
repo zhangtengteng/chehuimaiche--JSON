@@ -51,7 +51,7 @@ public class MyOderUploadInvoice extends BaseActivity {
 	private String fileBytes;
 	private Bitmap bitmap;
 	private Button upload_commit_invoice;
-	private String DDBH = "123445";
+	private String DDBH = "MCT20158124234547";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -237,7 +237,7 @@ public class MyOderUploadInvoice extends BaseActivity {
 				// 调用方法的名称
 				String methodName = "UploadImg";
 				// EndPoint
-				String endPoint = "http://ws.maichetong.chehui.com/SellerOperationService.asmx?";
+				String endPoint = "http://ws.maichetong.chehui.com/SellerOperationService.asmx";
 				// SOAP Action
 				String soapAction = "http://SellerOperationService.maichetong.chehui/UploadImg";
 				// 指定WebService的命名空间和调用方法
@@ -263,10 +263,11 @@ public class MyOderUploadInvoice extends BaseActivity {
 				SoapObject object = (SoapObject) envelope.bodyIn;
 				// 获取返回的结果
 				String result = object.getProperty(0).toString();
-//				startActivity(new Intent(MyOderUploadInvoice.this,MyOrderInvoiceSuccess.class));
-				if (result.indexOf("true") > 0) {
+				System.out.println("==============================="+result);
+				if (result.indexOf("true") !=-1) {
 					startActivity(new Intent(MyOderUploadInvoice.this,MyOrderInvoiceSuccess.class));
 				 } else {
+					  
 				}
 			}
 		}).start();

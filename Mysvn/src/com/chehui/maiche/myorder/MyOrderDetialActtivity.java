@@ -82,9 +82,8 @@ public class MyOrderDetialActtivity extends BaseActivity {
 	private TextView txt_seriesName;
 	private String cutCarPlan;
 	@SuppressWarnings("unused")
-	private String sellerID, tel, carDetail, carImage, guideprice, carColor,
-			payMode, postDrawCarPlan, carAddress, floorPriceCN, insurancePrice,
-			licensePrice, purchaseTax, prize, carGift, dingPrice;
+	private String sellerID, tel, carDetail, carImage, guideprice, carColor, payMode, postDrawCarPlan, carAddress,
+			floorPriceCN, insurancePrice, licensePrice, purchaseTax, prize, carGift, dingPrice;
 	private TextView txt_buyTax;
 	private TextView txt_addprice;
 	private TextView txt_Name;
@@ -105,7 +104,7 @@ public class MyOrderDetialActtivity extends BaseActivity {
 	private String postOtherFee;
 	private String postExtralGift;
 	private String orderID;
-	
+private String state;
 	private Builder builder;
 
 	private List<String> drawCarDate = new ArrayList<String>();
@@ -147,8 +146,7 @@ public class MyOrderDetialActtivity extends BaseActivity {
 				txt_licensePrice.setText(postLicensePrice);
 				txt_ortherCost.setText(postOtherFee);
 				txt_drawCarTime.setText(postDrawCarPlan);
-				ToastUtils.showShortToast(MyOrderDetialActtivity.this,
-						"修改报价成功！");
+				ToastUtils.showShortToast(MyOrderDetialActtivity.this, "修改报价成功！");
 				break;
 
 			default:
@@ -178,23 +176,15 @@ public class MyOrderDetialActtivity extends BaseActivity {
 	private void initModifyWidgets() {
 		View updataForm = modifyPriceManager.getView();
 
-		post_floorPrice = (EditText) updataForm
-				.findViewById(R.id.myorderDetail_edt_quote);
-		post_insurance = (EditText) updataForm
-				.findViewById(R.id.myorderDetail_edt_insurance);
-		post_licensePrice = (EditText) updataForm
-				.findViewById(R.id.myorderDetail_edt_licensePrice);
-		post_tax = (EditText) updataForm
-				.findViewById(R.id.myorderDetail_edt_tax);
-		post_otherFee = (EditText) updataForm
-				.findViewById(R.id.myorderDetail_edt_otherFee);
-		post_extralGift = (EditText) updataForm
-				.findViewById(R.id.myorderDetail_edt_extralGift);
-		post_drawCarPlan = (TextView) updataForm
-				.findViewById(R.id.myorderDetail_edt_drawCarPlan);
+		post_floorPrice = (EditText) updataForm.findViewById(R.id.myorderDetail_edt_quote);
+		post_insurance = (EditText) updataForm.findViewById(R.id.myorderDetail_edt_insurance);
+		post_licensePrice = (EditText) updataForm.findViewById(R.id.myorderDetail_edt_licensePrice);
+		post_tax = (EditText) updataForm.findViewById(R.id.myorderDetail_edt_tax);
+		post_otherFee = (EditText) updataForm.findViewById(R.id.myorderDetail_edt_otherFee);
+		post_extralGift = (EditText) updataForm.findViewById(R.id.myorderDetail_edt_extralGift);
+		post_drawCarPlan = (TextView) updataForm.findViewById(R.id.myorderDetail_edt_drawCarPlan);
 
-		post_btn_submit = (Button) updataForm
-				.findViewById(R.id.myorderDetail_btn_submit);
+		post_btn_submit = (Button) updataForm.findViewById(R.id.myorderDetail_btn_submit);
 
 		post_btn_submit.setOnClickListener(new OnClickListener() {
 
@@ -214,40 +204,38 @@ public class MyOrderDetialActtivity extends BaseActivity {
 	 */
 	private void modifyPrice() {
 
-		hadModifyprice = post_floorPrice.getText().toString().trim().equals("") ? post_floorPrice
-				.getHint().toString().trim().replaceAll("当前价格", "").trim()
+		hadModifyprice = post_floorPrice.getText().toString().trim().equals("")
+				? post_floorPrice.getHint().toString().trim().replaceAll("当前价格", "").trim()
 				: post_floorPrice.getText().toString().trim();
 
 		int valueOf = Integer.valueOf(hadModifyprice);
 		Integer oldPrice = (int) (Integer.valueOf(guideprice) * 0.6);
 		if (valueOf < oldPrice) {
-			mAlertTipsDialog_price("您所报的裸车价格与厂商指导价相差比较大，您确定使用这个价格吗？");
-			return;
+			ToastUtils.showShortToast(MyOrderDetialActtivity.this, "您所报的裸车价格与厂商指导价相差比较大，您确定使用这个价格吗？");
+			// return;
 		}
 
-		postInsurance = post_insurance.getText().toString().trim().equals("") ? post_insurance
-				.getHint().toString().trim().replaceAll("当前价格", "").trim()
+		postInsurance = post_insurance.getText().toString().trim().equals("")
+				? post_insurance.getHint().toString().trim().replaceAll("当前价格", "").trim()
 				: post_insurance.getText().toString().trim();
 
-		postLicensePrice = post_licensePrice.getText().toString().trim()
-				.equals("") ? post_licensePrice.getHint().toString().trim()
-				.replaceAll("当前价格", "").trim() : post_licensePrice.getText()
-				.toString().trim();
+		postLicensePrice = post_licensePrice.getText().toString().trim().equals("")
+				? post_licensePrice.getHint().toString().trim().replaceAll("当前价格", "").trim()
+				: post_licensePrice.getText().toString().trim();
 
-		postTax = post_tax.getText().toString().trim().equals("") ? post_tax
-				.getHint().toString().trim().replaceAll("当前价格", "").trim()
+		postTax = post_tax.getText().toString().trim().equals("")
+				? post_tax.getHint().toString().trim().replaceAll("当前价格", "").trim()
 				: post_tax.getText().toString().trim();
 
-		postOtherFee = post_otherFee.getText().toString().trim().equals("") ? post_otherFee
-				.getHint().toString().trim().replaceAll("当前价格", "").trim()
+		postOtherFee = post_otherFee.getText().toString().trim().equals("")
+				? post_otherFee.getHint().toString().trim().replaceAll("当前价格", "").trim()
 				: post_otherFee.getText().toString().trim();
 
 		postExtralGift = post_extralGift.getText().toString().trim().equals("") ? carGift
 				: post_extralGift.getText().toString().trim();
 
-		postDrawCarPlan = post_drawCarPlan.getText().toString().trim()
-				.equals("") ? carPlan : post_drawCarPlan.getText().toString()
-				.trim();
+		postDrawCarPlan = post_drawCarPlan.getText().toString().trim().equals("") ? carPlan
+				: post_drawCarPlan.getText().toString().trim();
 
 		// 更具提车计划替换成数字提交后台
 		if (postDrawCarPlan.equals("现车")) {
@@ -260,9 +248,8 @@ public class MyOrderDetialActtivity extends BaseActivity {
 
 		}
 
-		String updataParams = quoteID + "|" + cutCarPlan + "|" + hadModifyprice
-				+ "|" + postInsurance + "|" + postLicensePrice + "|" + postTax
-				+ "|" + postOtherFee + "|" + dingPrice + "|" + postExtralGift;
+		String updataParams = quoteID + "|" + cutCarPlan + "|" + hadModifyprice + "|" + postInsurance + "|"
+				+ postLicensePrice + "|" + postTax + "|" + postOtherFee + "|" + dingPrice + "|" + postExtralGift;
 
 		Log.d(TAG + "查看修改报价的信息", updataParams);
 
@@ -275,8 +262,16 @@ public class MyOrderDetialActtivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				setPopModifyWidth();
 
+				if (state.equals("1")) {
+					// 上传发票
+					activityManager
+							.startNextActivity(MyOderUploadInvoice.class);
+				} else if (state.equals("2")) {
+					// 隐藏
+				} else {
+					setPopModifyWidth();
+				}
 			}
 
 		});
@@ -319,7 +314,7 @@ public class MyOrderDetialActtivity extends BaseActivity {
 					int valueOf = Integer.valueOf(price);
 					Integer oldPrice = (int) (Integer.valueOf(guideprice) * 0.6);
 					if (valueOf < oldPrice) {
-						mAlertTipsDialog_price("您所报的裸车价格与厂商指导价相差比较大，您确定使用这个价格吗？");
+						// mAlertTipsDialog_price("您所报的裸车价格与厂商指导价相差比较大，您确定使用这个价格吗？");
 					}
 				}
 			}
@@ -352,14 +347,11 @@ public class MyOrderDetialActtivity extends BaseActivity {
 			protected String doInBackground(Void... params) {
 				// 请求服务器
 				final List<BasicNameValuePair> parameters = new ArrayList<BasicNameValuePair>();
-				parameters.add(new BasicNameValuePair("classname",
-						"SellerOperationService"));
-				parameters.add(new BasicNameValuePair("methodname",
-						"UpdateQuete"));
+				parameters.add(new BasicNameValuePair("classname", "SellerOperationService"));
+				parameters.add(new BasicNameValuePair("methodname", "UpdateQuete"));
 				parameters.add(new BasicNameValuePair("params", updataParams));
 
-				String response = HttpService.methodPost(CommonData.HTTP_URL,
-						parameters);
+				String response = HttpService.methodPost(CommonData.HTTP_URL, parameters);
 				return response;
 			}
 
@@ -374,8 +366,7 @@ public class MyOrderDetialActtivity extends BaseActivity {
 						Boolean success = jsonObject.getBoolean("Success");
 						String mess = jsonObject.getString("Mess");
 						if (success) {
-							Message msg = handler
-									.obtainMessage(CommonData.HTTP_HANDLE_SUCCESS);
+							Message msg = handler.obtainMessage(CommonData.HTTP_HANDLE_SUCCESS);
 							Bundle data = msg.getData();
 							data.putString("success", String.valueOf(success));
 							handler.sendMessage(msg);
@@ -383,8 +374,7 @@ public class MyOrderDetialActtivity extends BaseActivity {
 							CommonData.ISMYORDERFRAGMENTREFRESH = true;
 							ISMODIFY = true;
 						} else {
-							Message msg = handler
-									.obtainMessage(CommonData.HTTP_HANDLE_FAILE);
+							Message msg = handler.obtainMessage(CommonData.HTTP_HANDLE_FAILE);
 							Bundle data = msg.getData();
 							data.putString("mess", mess);
 							handler.sendMessage(msg);
@@ -395,8 +385,7 @@ public class MyOrderDetialActtivity extends BaseActivity {
 					}
 
 				} else {
-					ToastUtils.showShortToast(MyOrderDetialActtivity.this,
-							"网络加载失败!");
+					ToastUtils.showShortToast(MyOrderDetialActtivity.this, "网络加载失败!");
 				}
 
 			}
@@ -422,16 +411,22 @@ public class MyOrderDetialActtivity extends BaseActivity {
 		});
 
 		btn_modify = (Button) findViewById(R.id.myOrderDetail_btn_post);
+		// 根据state【0,1,2】判断订单的状态，待接受，已接受，已支付
+		if (state.equals("1")) {
+			btn_modify.setText("上传发票");
+			btn_modify.setVisibility(View.VISIBLE);
+		} else if (state.equals("2")) {
+			btn_modify.setVisibility(View.INVISIBLE);
+		}
 		txt_carAddress = (TextView) findViewById(R.id.myOrderDetail_txt_carAddress);
 		txt_carColor = (TextView) findViewById(R.id.myOrderDetail_txt_carColor);
 		txt_carPlan = (TextView) findViewById(R.id.myOrderDetail_txt_carPlan);
 		txt_carPrice = (TextView) findViewById(R.id.myOrderDetail_txt_carPrice);
 		TextView txt_createDateCN = (TextView) findViewById(R.id.myOrderDetail_txt_createDateCN);
-		txt_createDateCN.setText("详细报价\t\t" + createDateCN);
+		txt_createDateCN.setText("\t\t" + createDateCN.replaceAll("/", "—"));
 
 		// 讲万元改为元
-		float floorPriceCN_txt = Float
-				.valueOf(floorPriceCN.replaceAll("￥", "")) * 10000;
+		float floorPriceCN_txt = Float.valueOf(floorPriceCN.replaceAll("￥", "")) * 10000;
 		floorPrice = String.valueOf(floorPriceCN_txt);
 		carPrice = floorPrice.substring(0, floorPrice.indexOf("."));
 		txt_carPrice.setText(carPrice);
@@ -469,8 +464,7 @@ public class MyOrderDetialActtivity extends BaseActivity {
 		txt_Name = (TextView) findViewById(R.id.myOrderDetail_txt_Name);
 
 		TextView txt_fanli = (TextView) findViewById(R.id.myOrderDetail_txt_fanli);
-		txt_fanli.setText(SharedPreManager.getInstance().getString(
-				CommonData.CHEHUIFANLI, "300"));
+		txt_fanli.setText(SharedPreManager.getInstance().getString(CommonData.CHEHUIFANLI, "300"));
 
 		setPopWidthDrawCar();
 
@@ -517,12 +511,11 @@ public class MyOrderDetialActtivity extends BaseActivity {
 		// 额外赠送
 		carGift = intent.getStringExtra("CarGift");
 		carGift = carGift.equals("null") ? "待定" : carGift;
-		dingPrice = SharedPreManager.getInstance().getString(
-				CommonData.CHEHUIJIAJIA, "500");
+		dingPrice = SharedPreManager.getInstance().getString(CommonData.CHEHUIJIAJIA, "500");
 		cityname = intent.getStringExtra("Cityname");
 		quoteID = intent.getStringExtra("QuoteID");
 		orderID = intent.getStringExtra("OrderID");
-
+		state = intent.getStringExtra("State");
 		getOrderByID(orderID + "|" + sellerID);
 
 	}
@@ -535,8 +528,7 @@ public class MyOrderDetialActtivity extends BaseActivity {
 	 */
 	private void getOrderByID(final String conParams) {
 		if (!Utils.isNetworkAvailable(MyOrderDetialActtivity.this)) {
-			ToastUtils.showShortToast(MyOrderDetialActtivity.this,
-					R.string.common_network_unavalible);
+			ToastUtils.showShortToast(MyOrderDetialActtivity.this, R.string.common_network_unavalible);
 			return;
 		}
 		showWaitDialog(R.string.common_requesting);
@@ -546,14 +538,11 @@ public class MyOrderDetialActtivity extends BaseActivity {
 			protected String doInBackground(Void... params) {
 				// 请求服务器
 				final List<BasicNameValuePair> parameters = new ArrayList<BasicNameValuePair>();
-				parameters.add(new BasicNameValuePair("classname",
-						"SellerOperationService"));
-				parameters.add(new BasicNameValuePair("methodname",
-						"GetOrderByID"));
+				parameters.add(new BasicNameValuePair("classname", "SellerOperationService"));
+				parameters.add(new BasicNameValuePair("methodname", "GetOrderByID"));
 				parameters.add(new BasicNameValuePair("params", conParams));
 
-				String response = HttpService.methodPost(CommonData.HTTP_URL,
-						parameters);
+				String response = HttpService.methodPost(CommonData.HTTP_URL, parameters);
 				return response;
 
 			}
@@ -567,8 +556,7 @@ public class MyOrderDetialActtivity extends BaseActivity {
 					Log.d(TAG + "getOrderByID数据", json);
 					analysisJson();
 				} else {
-					ToastUtils.showShortToast(MyOrderDetialActtivity.this,
-							"网络加载失败!");
+					ToastUtils.showShortToast(MyOrderDetialActtivity.this, "网络加载失败!");
 				}
 			}
 
@@ -678,8 +666,7 @@ public class MyOrderDetialActtivity extends BaseActivity {
 		int width = getWindowManager().getDefaultDisplay().getWidth();
 		@SuppressWarnings({ "deprecation" })
 		int height = getWindowManager().getDefaultDisplay().getHeight();
-		PoPBlandWindowManager.getInstance().init(getApplicationContext(),
-				width, height / 3, R.layout.pop_bland);
+		PoPBlandWindowManager.getInstance().init(getApplicationContext(), width, height / 3, R.layout.pop_bland);
 	}
 
 	/**
@@ -689,36 +676,31 @@ public class MyOrderDetialActtivity extends BaseActivity {
 	 */
 	private void setCarTimeText(final TextView view) {
 		PoPBlandWindowManager.getInstance().setPickViewData(drawCarDate);
-		PoPBlandWindowManager.getInstance().changeOnClick(
-				new OnClickListener() {
+		PoPBlandWindowManager.getInstance().changeOnClick(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				view.setText(drawCarDate.get(1));
+				PoPBlandWindowManager.getInstance().dismissPop();
+			}
+		});
+		PoPBlandWindowManager.getInstance().changeOnSelect(new onSelectListener() {
+
+			@Override
+			public void onSelect(final String text) {
+				PoPBlandWindowManager.getInstance().changeOnClick(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
-						view.setText(drawCarDate.get(1));
+						// 设置文字
+						view.setText(text);
 						PoPBlandWindowManager.getInstance().dismissPop();
 					}
 				});
-		PoPBlandWindowManager.getInstance().changeOnSelect(
-				new onSelectListener() {
-
-					@Override
-					public void onSelect(final String text) {
-						PoPBlandWindowManager.getInstance().changeOnClick(
-								new OnClickListener() {
-
-									@Override
-									public void onClick(View v) {
-										// 设置文字
-										view.setText(text);
-										PoPBlandWindowManager.getInstance()
-												.dismissPop();
-									}
-								});
-					}
-				});
+			}
+		});
 		setPopWidthDrawCar();
-		PoPBlandWindowManager.getInstance().showPopAllLocation(txt_drawCarTime,
-				Gravity.CENTER | Gravity.BOTTOM, 0, 0);
+		PoPBlandWindowManager.getInstance().showPopAllLocation(txt_drawCarTime, Gravity.CENTER | Gravity.BOTTOM, 0, 0);
 
 	};
 
@@ -778,8 +760,7 @@ public class MyOrderDetialActtivity extends BaseActivity {
 		private void init(Context context, final int width, int height, int id) {
 			this.context = context;
 			// 创建PopupWindow对象
-			pop = new PopupWindow(setPopView(context, id),
-					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, false);
+			pop = new PopupWindow(setPopView(context, id), LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, false);
 			setPopWidth(context, width, height);
 			// 需要设置一下此参数，点击外边可消失
 			pop.setBackgroundDrawable(new BitmapDrawable());
@@ -805,14 +786,13 @@ public class MyOrderDetialActtivity extends BaseActivity {
 				// 引入窗口配置文件
 				popView = inflater.inflate(id, null);
 				// popView.setAlpha(110);
-				popView.findViewById(R.id.myorderDetail_close)
-						.setOnClickListener(new OnClickListener() {
+				popView.findViewById(R.id.myorderDetail_close).setOnClickListener(new OnClickListener() {
 
-							@Override
-							public void onClick(View arg0) {
-								dismissPop();
-							}
-						});
+					@Override
+					public void onClick(View arg0) {
+						dismissPop();
+					}
+				});
 			}
 			return popView;
 		}
@@ -838,34 +818,30 @@ public class MyOrderDetialActtivity extends BaseActivity {
 			pop.dismiss();
 		}
 
-		private void setPopWidth(Context context, final int width,
-				final int height) {
+		private void setPopWidth(Context context, final int width, final int height) {
 			if (popView == null) {
 				LogN.e(this, "popView is null !!!");
 				return;
 			}
-			popView.getViewTreeObserver().addOnGlobalLayoutListener(
-					new OnGlobalLayoutListener() {
+			popView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
 
-						@Override
-						public void onGlobalLayout() {
-							// 动态设置pop的宽度
-							FrameLayout.LayoutParams linearParams = (FrameLayout.LayoutParams) popView
-									.getLayoutParams();
-							linearParams.width = width;
-							linearParams.height = height;
-						}
-					});
+				@Override
+				public void onGlobalLayout() {
+					// 动态设置pop的宽度
+					FrameLayout.LayoutParams linearParams = (FrameLayout.LayoutParams) popView.getLayoutParams();
+					linearParams.width = width;
+					linearParams.height = height;
+				}
+			});
 		}
 
 		private void changeOnClick(OnClickListener onClickListener) {
 
-			popView.findViewById(R.id.myorderDetail_btn_submit)
-					.setOnClickListener(onClickListener);
+			popView.findViewById(R.id.myorderDetail_btn_submit).setOnClickListener(onClickListener);
 		}
 
 	}
-	
+
 	/**
 	 * 弹出dialog
 	 * 
@@ -874,20 +850,19 @@ public class MyOrderDetialActtivity extends BaseActivity {
 	private void mAlertTipsDialog_price(String message) {
 
 		if (builder == null) {
-			builder = new android.app.AlertDialog.Builder(MyOrderDetialActtivity.this);
+			builder = new android.app.AlertDialog.Builder(
+					MyOrderDetialActtivity.this);
 		}
-		builder.setMessage(message).setTitle("提示")
-				.setPositiveButton("取消", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						post_floorPrice.setText("");
-					}
-				})
-				.setNegativeButton("确定", new DialogInterface.OnClickListener() {
+		builder.setMessage(message).setTitle("提示").setPositiveButton("取消", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				post_floorPrice.setText("");
+			}
+		}).setNegativeButton("确定", new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
 
-					}
-				}).show();
+			}
+		}).show();
 	}
 }

@@ -185,9 +185,9 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 						Intent intent = new Intent(getActivity(),
 								MyOrderDetialActtivity.class);
 						// 根据state【0,1,2】判断订单的状态，待接受，已接受，已支付
-						String State = list.get(position).get("State");
-//						if (state.equals("1") || state.equals("2"))
-//							return;
+						String string = list.get(position).get("State");
+						if (string.equals("1") || string.equals("2"))
+							return;
 						String QuoteID = list.get(position).get("QuoteID");
 						String SellerID = list.get(position).get("SellerID");
 						String Tel = list.get(position).get("Tel");
@@ -238,7 +238,6 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 						intent.putExtra("DingPrice", DingPrice);
 						intent.putExtra("QuoteID", QuoteID);
 						intent.putExtra("OrderID", OrderID);
-						intent.putExtra("State", State);
 
 						startActivity(intent);
 					}

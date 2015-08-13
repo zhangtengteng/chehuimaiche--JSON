@@ -58,11 +58,16 @@ public class WelcomeActivity extends BaseActivity implements Runnable {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_welcome);
 
-		username = SharedPreManager.getInstance()
-				.getString(CommonData.USER_PHONE, "").trim();
+		/*username = SharedPreManager.getInstance()
+				.getString(CommonData.USER_PHONE, "15261825221").trim();
 
 		password = SharedPreManager.getInstance()
-				.getString(CommonData.USER_PWD, "").trim();
+				.getString(CommonData.USER_PWD, "111111").trim();*/
+		username = SharedPreManager.getInstance()
+				.getString(CommonData.USER_PHONE, "15261825221").trim();
+
+		password = SharedPreManager.getInstance()
+				.getString(CommonData.USER_PWD, "111111").trim();
 
 		if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
 			/**
