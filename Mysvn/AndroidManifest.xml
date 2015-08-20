@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.chehui.maiche"
     android:installLocation="auto"
@@ -209,6 +209,8 @@
             android:name=".login.RegSelectBrandActivity"
             android:launchMode="singleTask" >
         </activity>
+
+
         <!-- Required -->
         <service
             android:name="cn.jpush.android.service.PushService"
@@ -335,6 +337,26 @@
             android:name="com.chehui.maiche.setup.SetupFeedbackSuccess"
             android:label="@string/title_activity_feedback_success" >
         </activity>
+        <activity android:name="wxapi.WXEntryActivity" >
+        </activity>
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="55cd65c1e0f55a1647003fba" />
+
+        <activity
+            android:name="com.umeng.socialize.view.ShareActivity"
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:theme="@style/Theme.UMDialog"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
 
 </manifest>

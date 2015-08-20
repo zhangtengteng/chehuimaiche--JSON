@@ -10,6 +10,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.chehui.maiche.R;
+import com.chehui.maiche.SharedPreManager;
+import com.chehui.maiche.comm.CommonData;
+import com.chehui.maiche.custom.AutoListView;
+import com.chehui.maiche.custom.AutoListView.OnRefreshListener;
+import com.chehui.maiche.custom.BaseFragment;
+import com.chehui.maiche.enquiry.DownImage;
+import com.chehui.maiche.enquiry.DownImage.ImageCallBack;
+import com.chehui.maiche.httpserve.HttpService;
+import com.chehui.maiche.utils.LogN;
+import com.chehui.maiche.utils.ToastUtils;
+import com.chehui.maiche.utils.Utils;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -31,18 +44,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.chehui.maiche.R;
-import com.chehui.maiche.SharedPreManager;
-import com.chehui.maiche.comm.CommonData;
-import com.chehui.maiche.custom.BaseFragment;
-import com.chehui.maiche.enquiry.DownImage;
-import com.chehui.maiche.enquiry.DownImage.ImageCallBack;
-import com.chehui.maiche.httpserve.HttpService;
-import com.chehui.maiche.myorder.PullToRefreshListView.OnRefreshListener;
-import com.chehui.maiche.utils.LogN;
-import com.chehui.maiche.utils.ToastUtils;
-import com.chehui.maiche.utils.Utils;
-
 /**
  * 
  * @author zzp
@@ -55,7 +56,7 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 
 	private static final String TAG = "MyOrderFragment";
 	/** 自动刷新listView */
-	private PullToRefreshListView mPullToRefreshListView;
+	private AutoListView mPullToRefreshListView;
 
 	private View mInflater;
 
@@ -94,11 +95,9 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 	private MessageReceiver mMessageReceiver;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		mInflater = inflater.inflate(R.layout.fragment_my_order, container,
-				false);
+		mInflater = inflater.inflate(R.layout.fragment_my_order, container, false);
 		// used for receive msg
 		registerMessageReceiver();
 		initWidget();
@@ -113,8 +112,7 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 	@Override
 	public void onStart() {
 		super.onStart();
-		if (CommonData.ISMODIFYPRICE == true
-				|| CommonData.ISMYORDERFRAGMENTREFRESH == true) {
+		if (CommonData.ISMODIFYPRICE == true || CommonData.ISMYORDERFRAGMENTREFRESH == true) {
 			initData();
 			getMyOrderData(params);
 			// 全部报价
@@ -131,12 +129,9 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 
 	private void initWidget() {
 		btn_all = (Button) mInflater.findViewById(R.id.myOrder_btn_all);
-		btn_waitAccept = (Button) mInflater
-				.findViewById(R.id.myOrder_btn_waitAccept);
-		btn_hadAccept = (Button) mInflater
-				.findViewById(R.id.myOrder_btn_hadAccept);
-		btn_hadTransac = (Button) mInflater
-				.findViewById(R.id.myOrder_btn_hadTransac);
+		btn_waitAccept = (Button) mInflater.findViewById(R.id.myOrder_btn_waitAccept);
+		btn_hadAccept = (Button) mInflater.findViewById(R.id.myOrder_btn_hadAccept);
+		btn_hadTransac = (Button) mInflater.findViewById(R.id.myOrder_btn_hadTransac);
 
 		btn_all.setOnClickListener(this);
 		btn_hadAccept.setOnClickListener(this);
@@ -149,100 +144,81 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 	 * 全部报价
 	 */
 	private void allOrder() {
-		mPullToRefreshListView = (PullToRefreshListView) mInflater
-				.findViewById(R.id.myOrder_frag_list);
-
+		mPullToRefreshListView = (AutoListView) mInflater.findViewById(R.id.myOrder_frag_list);
 		/** 刷新 */
 		mPullToRefreshListView.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override
 			public void onRefresh() {
 				getMyOrderData(params);
+				if (adapter != null) {
+					adapter.notifyDataSetChanged();
 
-				mPullToRefreshListView.postDelayed(new Runnable() {
-
-					@Override
-					public void run() {
-						if (adapter != null) {
-							adapter.notifyDataSetChanged();
-
-						}
-						mPullToRefreshListView.onRefreshComplete();
-					}
-				}, 1000);
-
+				}
 			}
 		});
 
 		/** 条目点击事件 */
-		mPullToRefreshListView
-				.setOnItemClickListener(new OnItemClickListener() {
+		mPullToRefreshListView.setOnItemClickListener(new OnItemClickListener() {
 
-					@Override
-					public void onItemClick(AdapterView<?> parent, View view,
-							int position, long id) {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				LogN.e(getActivity(), "position====="+position+",="+list.size());
+				LogN.e(getActivity(), "id====="+id);
+				Intent intent = new Intent(getActivity(), MyOrderDetialActtivity.class);
+				Map<String, String> myOrder = list.get(position-1);
+				// 根据state【0,1,2】判断订单的状态，待接受，已接受，已支付
+				String State = myOrder.get("State");
+				// if (state.equals("1") || state.equals("2"))
+				// return;
+				String QuoteID = myOrder.get("QuoteID");
+				String SellerID = myOrder.get("SellerID");
+				String Tel = myOrder.get("Tel");
+				String CarDetail = myOrder.get("CarDetail");
+				String CarImage = myOrder.get("CarImage");
+				String Guideprice = myOrder.get("Guideprice");
+				String CarColor = myOrder.get("CarColor");
+				String PayMode = myOrder.get("PayMode");
+				String CarPlan = myOrder.get("CarPlan");
+				String CarAddress = myOrder.get("CarAddress");
+				String FloorPriceCN = myOrder.get("FloorPriceCN");
 
-						Intent intent = new Intent(getActivity(),
-								MyOrderDetialActtivity.class);
-						// 根据state【0,1,2】判断订单的状态，待接受，已接受，已支付
-						String State = list.get(position).get("State");
-//						if (state.equals("1") || state.equals("2"))
-//							return;
-						String QuoteID = list.get(position).get("QuoteID");
-						String SellerID = list.get(position).get("SellerID");
-						String Tel = list.get(position).get("Tel");
-						String CarDetail = list.get(position).get("CarDetail");
-						String CarImage = list.get(position).get("CarImage");
-						String Guideprice = list.get(position)
-								.get("Guideprice");
-						String CarColor = list.get(position).get("CarColor");
-						String PayMode = list.get(position).get("PayMode");
-						String CarPlan = list.get(position).get("CarPlan");
-						String CarAddress = list.get(position)
-								.get("CarAddress");
-						String FloorPriceCN = list.get(position).get(
-								"FloorPriceCN");
+				String InsurancePrice = myOrder.get("InsurancePrice");
+				String LicensePrice = myOrder.get("LicensePrice");
+				String PurchaseTax = myOrder.get("PurchaseTax");
+				String Prize = myOrder.get("Prize");
 
-						String InsurancePrice = list.get(position).get(
-								"InsurancePrice");
-						String LicensePrice = list.get(position).get(
-								"LicensePrice");
-						String PurchaseTax = list.get(position).get(
-								"PurchaseTax");
-						String Prize = list.get(position).get("Prize");
+				String CarGift = myOrder.get("CarGift");
+				String DingPrice = myOrder.get("DingPrice");
+				String Cityname = myOrder.get("Cityname");
+				String OrderID = myOrder.get("OrderID");
+				String CreateDateCN = myOrder.get("CreateDateCN");
 
-						String CarGift = list.get(position).get("CarGift");
-						String DingPrice = list.get(position).get("DingPrice");
-						String Cityname = list.get(position).get("Cityname");
-						String OrderID = list.get(position).get("OrderID");
-						String CreateDateCN = list.get(position).get(
-								"CreateDateCN");
+				intent.putExtra("Cityname", Cityname);
+				intent.putExtra("CreateDateCN", CreateDateCN);
+				intent.putExtra("SellerID", SellerID);
+				intent.putExtra("Tel", Tel);
+				intent.putExtra("CarDetail", CarDetail);
+				intent.putExtra("CarImage", CarImage);
+				intent.putExtra("Guideprice", Guideprice);
+				intent.putExtra("CarColor", CarColor);
+				intent.putExtra("PayMode", PayMode);
+				intent.putExtra("CarPlan", CarPlan);
+				intent.putExtra("CarAddress", CarAddress);
+				intent.putExtra("FloorPriceCN", FloorPriceCN);
+				intent.putExtra("InsurancePrice", InsurancePrice);
+				intent.putExtra("LicensePrice", LicensePrice);
+				intent.putExtra("PurchaseTax", PurchaseTax);
+				intent.putExtra("Prize", Prize);
+				intent.putExtra("CarGift", CarGift);
+				intent.putExtra("DingPrice", DingPrice);
+				intent.putExtra("QuoteID", QuoteID);
+				intent.putExtra("OrderID", OrderID);
+				intent.putExtra("State", State);
 
-						intent.putExtra("Cityname", Cityname);
-						intent.putExtra("CreateDateCN", CreateDateCN);
-						intent.putExtra("SellerID", SellerID);
-						intent.putExtra("Tel", Tel);
-						intent.putExtra("CarDetail", CarDetail);
-						intent.putExtra("CarImage", CarImage);
-						intent.putExtra("Guideprice", Guideprice);
-						intent.putExtra("CarColor", CarColor);
-						intent.putExtra("PayMode", PayMode);
-						intent.putExtra("CarPlan", CarPlan);
-						intent.putExtra("CarAddress", CarAddress);
-						intent.putExtra("FloorPriceCN", FloorPriceCN);
-						intent.putExtra("InsurancePrice", InsurancePrice);
-						intent.putExtra("LicensePrice", LicensePrice);
-						intent.putExtra("PurchaseTax", PurchaseTax);
-						intent.putExtra("Prize", Prize);
-						intent.putExtra("CarGift", CarGift);
-						intent.putExtra("DingPrice", DingPrice);
-						intent.putExtra("QuoteID", QuoteID);
-						intent.putExtra("OrderID", OrderID);
-						intent.putExtra("State", State);
-
-						startActivity(intent);
-					}
-				});
+				startActivity(intent);
+			}
+		});
 	}
 
 	/**
@@ -250,14 +226,15 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 	 */
 	private void initData() {
 		int id = SharedPreManager.getInstance().getInt(CommonData.USER_ID, 71);
-		int userState = SharedPreManager.getInstance().getInt(
-				CommonData.USER_STATE, 0);
+		int userState = SharedPreManager.getInstance().getInt(CommonData.USER_STATE, 0);
 
 		state = String.valueOf(userState);
 
 		sellerid = String.valueOf(id);
 
-		params = sellerid + "|" + state;
+		page = 1;
+
+		params = sellerid + "|" + state + "|" + String.valueOf(page);
 
 	}
 
@@ -269,34 +246,30 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 	 */
 	private void getMyOrderData(final String conParams) {
 		if (!Utils.isNetworkAvailable(MyOrderFragment.this.getActivity())) {
-			ToastUtils.showShortToast(getActivity(),
-					R.string.common_network_unavalible);
+			ToastUtils.showShortToast(getActivity(), R.string.common_network_unavalible);
 			return;
 		}
 
-//		showWaitDialog(R.string.common_requesting);
+		showWaitDialog(R.string.common_requesting);
 		new AsyncTask<Void, Integer, String>() {
 
 			@Override
 			protected String doInBackground(Void... params) {
 				// 请求服务器
 				final List<BasicNameValuePair> parameters = new ArrayList<BasicNameValuePair>();
-				parameters.add(new BasicNameValuePair("classname",
-						"SellerOperationService"));
-				parameters.add(new BasicNameValuePair("methodname",
-						"GetQueteByID"));
+				parameters.add(new BasicNameValuePair("classname", "SellerOperationService"));
+				parameters.add(new BasicNameValuePair("methodname", "GetQueteByID"));
 				parameters.add(new BasicNameValuePair("params", conParams));
 
 				Log.d(TAG + "查看参数类型", parameters.toString());
-				String response = HttpService.methodPost(CommonData.HTTP_URL,
-						parameters);
+				String response = HttpService.methodPost(CommonData.HTTP_URL, parameters);
 
 				return response;
 			}
 
 			@Override
 			protected void onPostExecute(String result) {
-//				dismissWaitDialog();
+				dismissWaitDialog();
 				if (result != null) {
 					json = result.toString();
 					Log.d(TAG + "我的报价界面所有数据", json);
@@ -319,8 +292,7 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 			Boolean success = jsonObject.getBoolean("Success");
 			String mess = jsonObject.getString("Mess");
 			if (success != true) {
-				Message msg = handler
-						.obtainMessage(CommonData.HTTP_HANDLE_FAILE);
+				Message msg = handler.obtainMessage(CommonData.HTTP_HANDLE_FAILE);
 				Bundle data = msg.getData();
 				data.putString("mess", mess);
 				handler.sendMessage(msg);
@@ -395,8 +367,7 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 					map.put("Cityname", Cityname);
 					map.put("FloorPrice", FloorPrice);
 					map.put("FloorPriceCN", FloorPriceCN);
-					System.out.println(FloorPrice + "++++++++++++++++++++"
-							+ FloorPriceCN);
+					System.out.println(FloorPrice + "++++++++++++++++++++" + FloorPriceCN);
 					map.put("InsurancePrice", InsurancePrice);
 					map.put("LicensePrice", LicensePrice);
 					map.put("PurchaseTax", PurchaseTax);
@@ -474,7 +445,8 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 
 				}
 			}
-
+			mPullToRefreshListView.onRefreshComplete();
+			mPullToRefreshListView.setResultSize(list.size());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -491,8 +463,7 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 			case CommonData.HTTP_HANDLE_FAILE:
 				Bundle data = msg.getData();
 				String result = data.getString("mess");
-				ToastUtils.showShortToast(
-						getActivity().getApplicationContext(), result);
+				ToastUtils.showShortToast(getActivity().getApplicationContext(), result);
 				break;
 
 			default:
@@ -501,6 +472,7 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 
 		}
 	};
+	private int page;
 
 	/**
 	 * 自定义适配器
@@ -519,8 +491,7 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 		@SuppressWarnings("unused")
 		private Context context;
 
-		public MyOrderAdapter(Context context,
-				List<Map<String, String>> listTOder) {
+		public MyOrderAdapter(Context context, List<Map<String, String>> listTOder) {
 			super();
 			this.context = context;
 			this.listTOrder = listTOder;
@@ -560,19 +531,14 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 			View line_last = null;
 			if (convertView == null) {
 				// 生成条目对象
-				convertView = inflater.inflate(R.layout.fragment_my_order_item,
-						null);
-				img_CarImage = (ImageView) convertView
-						.findViewById(R.id.myOrderListItem_img_carImage);
+				convertView = inflater.inflate(R.layout.fragment_my_order_item, null);
+				img_CarImage = (ImageView) convertView.findViewById(R.id.myOrderListItem_img_carImage);
 
-				txt_CarDetail = (TextView) convertView
-						.findViewById(R.id.myOrderListItem_txt_CarDetail);
+				txt_CarDetail = (TextView) convertView.findViewById(R.id.myOrderListItem_txt_CarDetail);
 
-				txt_CreateDateCN = (TextView) convertView
-						.findViewById(R.id.myOrderListItem_txt_CreateDateCN);
+				txt_CreateDateCN = (TextView) convertView.findViewById(R.id.myOrderListItem_txt_CreateDateCN);
 
-				txt_FloorPriceCN = (TextView) convertView
-						.findViewById(R.id.myOrderListItem_txt_FloorPriceCN);
+				txt_FloorPriceCN = (TextView) convertView.findViewById(R.id.myOrderListItem_txt_FloorPriceCN);
 				line_top = convertView.findViewById(R.id.line_top);
 				line_bottom = convertView.findViewById(R.id.line_below);
 				line_last = convertView.findViewById(R.id.line_last);
@@ -608,8 +574,7 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 				line_last.setVisibility(View.VISIBLE);
 			}
 			// 绑定数据
-			DownImage downImage = new DownImage(url
-					+ listTOrder.get(position).get("CarImage"));
+			DownImage downImage = new DownImage(url + listTOrder.get(position).get("CarImage"));
 			downImage.loadImage(new ImageCallBack() {
 
 				@Override
@@ -619,10 +584,8 @@ public class MyOrderFragment extends BaseFragment implements OnClickListener {
 			});
 
 			txt_CarDetail.setText(listTOrder.get(position).get("CarDetail"));
-			txt_CreateDateCN.setText(listTOrder.get(position).get(
-					"CreateDateCN"));
-			txt_FloorPriceCN.setText(listTOrder.get(position).get(
-					"FloorPriceCN"));
+			txt_CreateDateCN.setText(listTOrder.get(position).get("CreateDateCN"));
+			txt_FloorPriceCN.setText(listTOrder.get(position).get("FloorPriceCN"));
 			return convertView;
 		}
 

@@ -101,13 +101,9 @@ public class PoPBlandWindowManager {
 	public void showPopAllLocation(View parent, int gravity, int x, int y) {
 		p=parent;
 		if (pop != null) {
-			LogN.e(PoPBlandWindowManager.this,
-					"pop.isShowing()     =" + pop.isShowing());
 			if (!pop.isShowing()) {
 				pop.showAtLocation(parent, gravity, x, y);
-				LogN.e(PoPBlandWindowManager.this, "pop.isShowing()222     ="
-						+ pop.isShowing());
-			}
+  			}
 		} else {
 			LogN.e(this, "popWindow is null!!!");
 		}

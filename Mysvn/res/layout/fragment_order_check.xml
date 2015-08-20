@@ -4,12 +4,12 @@
     android:layout_height="match_parent"
     android:background="@color/main_order_background"
     android:orientation="vertical" >
-    <com.chehui.maiche.myorder.PullToRefreshListView
+    <com.chehui.maiche.custom.AutoListView
         android:overScrollMode="never"
         android:cacheColorHint="#00000000"
         android:fadingEdge="none"
         android:id="@+id/list_order"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:divider="@null" />
 </RelativeLayout>

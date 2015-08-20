@@ -10,6 +10,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.chehui.maiche.R;
+import com.chehui.maiche.SharedPreManager;
+import com.chehui.maiche.comm.CommonData;
+import com.chehui.maiche.custom.AutoListView;
+import com.chehui.maiche.custom.AutoListView.OnLoadListener;
+import com.chehui.maiche.custom.AutoListView.OnRefreshListener;
+import com.chehui.maiche.custom.BaseFragment;
+import com.chehui.maiche.enquiry.DownImage.ImageCallBack;
+import com.chehui.maiche.httpserve.HttpService;
+import com.chehui.maiche.utils.LogN;
+import com.chehui.maiche.utils.ToastUtils;
+import com.chehui.maiche.utils.Utils;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,18 +40,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.chehui.maiche.R;
-import com.chehui.maiche.SharedPreManager;
-import com.chehui.maiche.comm.CommonData;
-import com.chehui.maiche.custom.BaseFragment;
-import com.chehui.maiche.enquiry.DownImage.ImageCallBack;
-import com.chehui.maiche.httpserve.HttpService;
-import com.chehui.maiche.myorder.PullToRefreshListView;
-import com.chehui.maiche.myorder.PullToRefreshListView.OnRefreshListener;
-import com.chehui.maiche.utils.LogN;
-import com.chehui.maiche.utils.ToastUtils;
-import com.chehui.maiche.utils.Utils;
-
 /***
  * 抢单报价
  * 
@@ -54,7 +55,7 @@ public class OrderCheckFragment extends BaseFragment {
 	/** 返回json数据 */
 	private String json;
 	/** 自定义ListView */
-	private PullToRefreshListView listView;
+	private AutoListView listView;
 	/** 自定义适配器 */
 	private EqOrderAdapter adapter;
 	/** 用户ID跳转下级也需要的参数 */
@@ -73,19 +74,18 @@ public class OrderCheckFragment extends BaseFragment {
 	private View mInflater;
 	/** 是否被认证 */
 	private int vipLevel;
-	// for receive customer msg from jpush server
+	/** for receive customer msg from jpush server */
 	private MessageReceiver mMessageReceiver;
+	public int page;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mInflater = inflater.inflate(R.layout.fragment_order_check, container, false);
 		// used for receive msg
 		registerMessageReceiver();
-		listView = (PullToRefreshListView) mInflater.findViewById(R.id.list_order);
-
+		listView = (AutoListView) mInflater.findViewById(R.id.list_order);
 		initData();
 		getOrderByBrands(postParams);
-
 		/**
 		 * 刷新事件
 		 */
@@ -93,22 +93,28 @@ public class OrderCheckFragment extends BaseFragment {
 
 			@Override
 			public void onRefresh() {
+				page = 1;
 
 				getOrderByBrands(postParams);
 
-				listView.postDelayed(new Runnable() {
+				if (adapter != null) {
+					adapter.notifyDataSetChanged();
+				}
 
-					@Override
-					public void run() {
-						if (adapter != null) {
-							adapter.notifyDataSetChanged();
-						}
-						listView.onRefreshComplete();
-					}
-
-				}, 1000);
 			}
+		});
 
+		listView.setOnLoadListener(new OnLoadListener() {
+
+			@Override
+			public void onLoad() {
+				page++;
+				getOrderByBrands(postParams);
+				if (adapter != null) {
+					adapter.notifyDataSetChanged();
+				}
+
+			}
 		});
 
 		/**
@@ -116,12 +122,13 @@ public class OrderCheckFragment extends BaseFragment {
 		 */
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
-			@SuppressWarnings("deprecation")
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				LogN.e(getActivity(), "position====="+position+",="+list.size());
+				LogN.e(getActivity(), "id====="+id);
 				// 需要用户sellerId 和OrderId
 				view.setBackground(getResources().getDrawable(R.drawable.item_selector));
-				String orderID = list.get(position).get("orderId");
+				String orderID = list.get(position-1).get("orderId");
 				Intent intent = new Intent(getActivity().getApplicationContext(), OrderItemDetail.class);
 				intent.putExtra("vipLevel", String.valueOf(vipLevel));
 				intent.putExtra("orderid", orderID);
@@ -152,7 +159,6 @@ public class OrderCheckFragment extends BaseFragment {
 	private void initData() {
 
 		int id = SharedPreManager.getInstance().getInt(CommonData.USER_ID, 72);
-
 		vipLevel = SharedPreManager.getInstance().getInt(CommonData.VIPLEVEL, 0);
 
 		sellbrand1 = SharedPreManager.getInstance().getString(CommonData.BlandId1, "1");
@@ -163,12 +169,16 @@ public class OrderCheckFragment extends BaseFragment {
 
 		sellerid = String.valueOf(id);
 
-		Log.d(TAG + "查询价的提交信息", sellbrand1 + sellbrand2 + sellbrand3 + cityname.trim() + sellerid);
+		page = 1;
+
+		Log.d(TAG + "查询价的提交信息",
+				sellbrand1 + sellbrand2 + sellbrand3 + cityname.trim() + sellerid + String.valueOf(page));
 
 		// 去掉字符串中的空格
 		String testCityname = cityname.replaceAll(" ", "");
 
-		postParams = sellbrand1 + "|" + sellbrand1 + "|" + sellbrand1 + "|" + testCityname + "|" + sellerid;
+		postParams = sellbrand1 + "|" + sellbrand1 + "|" + sellbrand1 + "|" + testCityname + "|" + sellerid + "|"
+				+ String.valueOf(page);
 
 	}
 
@@ -223,7 +233,6 @@ public class OrderCheckFragment extends BaseFragment {
 			JSONObject jsonObject = new JSONObject(json);
 			Boolean success = jsonObject.getBoolean("Success");
 			String mess = jsonObject.getString("Mess");
-
 			if (success == true) {
 				// 解析data数据
 				JSONArray jsonArray = jsonObject.getJSONArray("Data");
@@ -287,15 +296,17 @@ public class OrderCheckFragment extends BaseFragment {
 					CommonData.tvNumber.setVisibility(View.INVISIBLE);
 				}
 			} else {
-
 				ToastUtils.showShortToast(getActivity().getApplicationContext(), mess);
-
 			}
 
 		} catch (JSONException e) {
 
 			e.printStackTrace();
 		}
+
+		listView.onRefreshComplete();
+		listView.onLoadComplete();
+		listView.setResultSize(list.size());
 
 	}
 
@@ -346,6 +357,7 @@ public class OrderCheckFragment extends BaseFragment {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
+			LogN.e(getActivity(), "position====="+position);
 			final ImageView img_CarImage;
 			TextView txt_SeriesName = null;
 			TextView txt_PhoneNum = null;

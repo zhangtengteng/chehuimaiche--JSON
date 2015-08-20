@@ -1,0 +1,103 @@
+package com.chehui.maiche.setup;
+
+import com.chehui.maiche.BaseActivity;
+import com.chehui.maiche.R;
+import com.chehui.maiche.update.UpdateManager;
+import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
+
+/****
+ * 关于页面
+ */
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.LinearLayout;
+
+public class SetupAboutActivity extends BaseActivity implements OnClickListener {
+
+	// 版本升级
+	private LinearLayout rlUpgrade;
+
+	/** 微信APPID */
+	private static final String APP_ID = "wx7517b95af112162b";
+
+	/** 第三方应用和微信通信接口 */
+	private IWXAPI api;
+
+	/**
+	 * 注册到微信
+	 */
+	private void reToWx() {
+		// 通过WXAPIFacotry工厂，获取WXAPI实例
+		api = WXAPIFactory.createWXAPI(this, APP_ID, true);
+
+		api.registerApp(APP_ID);
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_about);
+		initTitleView(-1, 255, R.string.set_account_about, 255, -1, 0);
+		reToWx();
+		initWidgets();
+
+	}
+
+	/**
+	 * 发送消息至微信
+	 * 
+	 * @param flag(0:表示分享到微信好友，1：表示分享到盆友圈)
+	 * 
+	 */
+	private void wechatShare(int flag) {
+		WXWebpageObject webpage = new WXWebpageObject();
+		webpage.webpageUrl = "http://www.baidu.com";
+		WXMediaMessage msg = new WXMediaMessage(webpage);
+		msg.title = "买车通";
+
+		// 这里替换一张自己工程里的图片资源
+		Bitmap thumb = BitmapFactory.decodeResource(getResources(), R.drawable.car);
+		msg.setThumbImage(thumb);
+
+		SendMessageToWX.Req req = new SendMessageToWX.Req();
+		req.transaction = String.valueOf(System.currentTimeMillis());
+		req.message = msg;
+		req.scene = flag == 0 ? SendMessageToWX.Req.WXSceneSession : SendMessageToWX.Req.WXSceneTimeline;
+		api.sendReq(req);
+	}
+
+	private void initWidgets() {
+		rlUpgrade = (LinearLayout) findViewById(R.id.rlUpgrade);
+		Button about_wxbtn = (Button) findViewById(R.id.setup_about_wxbtn);
+		rlUpgrade.setOnClickListener(this);
+		about_wxbtn.setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.rlUpgrade:
+			try {
+				new UpdateManager(this).isupdate();
+			} catch (NameNotFoundException e) {
+				e.printStackTrace();
+			}
+			break;
+
+		// 微信分享
+		case R.id.setup_about_wxbtn:
+			wechatShare(1);
+		default:
+			break;
+		}
+	}
+}

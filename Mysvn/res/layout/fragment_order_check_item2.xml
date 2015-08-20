@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical" >
@@ -8,7 +8,7 @@
    <View
         android:id="@+id/line_top"
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:visibility="gone"
         android:background="@color/little_gray" />
 
@@ -142,14 +142,14 @@
   <View
         android:id="@+id/line_below"
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:layout_marginLeft="10dp"
         android:background="@color/little_gray" />
     
       <View
         android:id="@+id/line_last"
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:visibility="gone"
         android:background="@color/little_gray" />
 

@@ -73,7 +73,8 @@
 \n
 8、用户需遵守所有适用汽车销售行业的法律、法规、条例和规章。
 \n
-\n</string>
+\n
+</string>
 
     <!-- 我的报价 -->
     <string name="xunjia_baojia">我的报价</string>
@@ -229,11 +230,17 @@
     <string name="upload">上传</string>
     <string name="feedback_session">注：订单相关问题或紧急相关问题请拨打客服电话获得及时相关帮助</string>
     <string name="call_us">联系我们:</string>
-       <string name="feedback_success">上传成功</string>
+    <string name="feedback_success">上传成功</string>
     <string name="feedback_phone">15850590710</string>
     <string name="feed_success">恭喜意见提交成功！</string>
     <string name="feed_title_success">提交成功</string>
-     <string name="feedback_commit_finish">完成</string>
+    <string name="feedback_commit_finish">完成</string>
+    <string name="version_session">车惠卖车通，是车惠网旗下帮助4S店销售顾问实实在在提示业绩的卖车软件！根据本地精准的潜在购车线索，加盟销售顾问采取匿名报价的方式快速抢单报价获取客户。\n车惠卖车通的目标是让所有销售顾问的收入翻倍！ </string>
+    <string name="version_session2">车惠卖车通的目标是让所有销售顾问的收入翻倍！</string>
+    <string name="version_url_txt">车惠网网址:</string>
+    <string name="version_url">www.chehui.com</string>
+    <string name="version_tell_friend">告诉朋友:</string>
+    <string name="version_share_wechat">将卖车通分享给微信好友</string>
     <!-- 公共 -->
 
     <string name="common_abnormal_server">服务器异常&#8230;</string>
@@ -306,9 +313,11 @@
     <!-- 卖车秘籍 -->
     <string name="tips_a">卖车三句诀，车惠通卖车就是这么简单！</string>
     <string name="tips_b">                                               第一诀：一次报底价</string>
-    <string name="tips_c">因为车惠卖车通是一个比价购车平台，不仅你一个人在给消费者报价，所以一定要一次要把底价报出来，用户会根据裸车价比较。特别是您有优势的车源，可以先和公司争取好更底的优惠！\n</string>
+    <string name="tips_c">因为车惠卖车通是一个比价购车平台，不仅你一个人在给消费者报价，所以一定要一次要把底价报出来，用户会根据裸车价比较。特别是您有优势的车源，可以先和公司争取好更底的优惠！\n
+</string>
     <string name="tips_d">第二诀：保险算实价</string>
-    <string name="tips_e">消费者通过车惠不仅比较车价，同时也会比较车险价格，所以车险也不要玩虚的。不用担心消费者会到店各种再议价，因为，消费者能看到您的联系方式时，他已经在车惠付了订金了。\n</string>
+    <string name="tips_e">消费者通过车惠不仅比较车价，同时也会比较车险价格，所以车险也不要玩虚的。不用担心消费者会到店各种再议价，因为，消费者能看到您的联系方式时，他已经在车惠付了订金了。\n
+</string>
     <string name="tips_f">第三诀：务必多赠送</string>
     <string name="tips_g">消费者买车图个实惠，多附加一些有含金量的赠送，更容易打动消费者。包括上牌费、各项杂费也尽可能一步优惠到位！</string>
 
